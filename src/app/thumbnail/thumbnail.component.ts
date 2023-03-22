@@ -59,6 +59,13 @@ export class ThumbnailComponent implements OnChanges {
    */
   isLoading$ = new BehaviorSubject(true);
 
+  /**
+   * A set of all the images who couldn't be retrieved, this needs to be saved here because when an image can't be
+   * loaded and that we try to retrieve it for a second time, the onerror event will not be triggered, which can lead
+   * to an infinite loading thumbnail.
+   */
+  failedImages: Set<string> = new Set();
+
   constructor(
     protected auth: AuthService,
     protected authorizationService: AuthorizationDataService,
@@ -75,6 +82,7 @@ export class ThumbnailComponent implements OnChanges {
       return;
     }
 
+    this.retriedWithToken = false;
     const src = this.contentHref;
     if (hasValue(src)) {
       this.setSrc(src);
@@ -110,6 +118,7 @@ export class ThumbnailComponent implements OnChanges {
    */
   errorHandler() {
     const src = this.src$.getValue();
+    this.failedImages.add(src);
     const thumbnail = this.bitstream;
     const thumbnailSrc = thumbnail?._links?.content?.href;
 
@@ -162,6 +171,9 @@ export class ThumbnailComponent implements OnChanges {
    */
   setSrc(src: string): void {
     this.src$.next(src);
+    if (this.failedImages.has(src)) {
+      this.errorHandler();
+    }
     if (src === null) {
       this.isLoading$.next(false);
     }
