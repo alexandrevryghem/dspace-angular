@@ -507,6 +507,11 @@ export class SectionsService {
                 }
               });
             }
+            if (field.selectableRelationship && !isEmpty(field.selectableRelationship)) {
+              if (!metadata.includes(field.selectableRelationship.relationshipType)) {
+                metadata.push('relation.' + field.selectableRelationship.relationshipType);
+              }
+            }
           });
         }
       });
