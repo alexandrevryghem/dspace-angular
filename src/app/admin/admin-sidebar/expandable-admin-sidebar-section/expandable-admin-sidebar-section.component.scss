@@ -17,7 +17,7 @@
         flex-direction: column;
     }
 
-    li.sidebar-section.expanded {
+    div.sidebar-section.expanded {
       background-color: var(--ds-admin-sidebar-active-bg) !important;
     }
 }

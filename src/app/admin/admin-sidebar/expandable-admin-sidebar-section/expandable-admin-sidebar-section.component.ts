@@ -2,7 +2,6 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { rotate } from '../../../shared/animations/rotate';
 import { AdminSidebarSectionComponent } from '../admin-sidebar-section/admin-sidebar-section.component';
 import { slide } from '../../../shared/animations/slide';
-import { CSSVariableService } from '../../../shared/sass-helper/sass-helper.service';
 import { bgColor } from '../../../shared/animations/bgColor';
 import { MenuService } from '../../../shared/menu/menu.service';
 import { combineLatest as combineLatestObservable, Observable } from 'rxjs';
@@ -30,11 +29,6 @@ export class ExpandableAdminSidebarSectionComponent extends AdminSidebarSectionC
   menuID = MenuID.ADMIN;
 
   /**
-   * The background color of the section when it's active
-   */
-  sidebarActiveBg;
-
-  /**
    * Emits true when the sidebar is currently collapsed, true when it's expanded
    */
   sidebarCollapsed: Observable<boolean>;
@@ -53,7 +47,6 @@ export class ExpandableAdminSidebarSectionComponent extends AdminSidebarSectionC
   constructor(
     @Inject('sectionDataProvider') menuSection,
     protected menuService: MenuService,
-    private variableService: CSSVariableService,
     protected injector: Injector,
     protected router: Router,
   ) {
@@ -65,10 +58,9 @@ export class ExpandableAdminSidebarSectionComponent extends AdminSidebarSectionC
    */
   ngOnInit(): void {
     super.ngOnInit();
-    this.sidebarActiveBg = this.variableService.getVariable('adminSidebarActiveBg');
     this.sidebarCollapsed = this.menuService.isMenuCollapsed(this.menuID);
     this.sidebarPreviewCollapsed = this.menuService.isMenuPreviewCollapsed(this.menuID);
-    this.expanded = combineLatestObservable(this.active, this.sidebarCollapsed, this.sidebarPreviewCollapsed)
+    this.expanded = combineLatestObservable([this.active, this.sidebarCollapsed, this.sidebarPreviewCollapsed])
       .pipe(
         map(([active, sidebarCollapsed, sidebarPreviewCollapsed]) => (active && (!sidebarCollapsed || !sidebarPreviewCollapsed)))
       );
