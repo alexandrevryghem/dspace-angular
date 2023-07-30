@@ -47,6 +47,7 @@ import { GroupDataService } from '../../core/eperson/group-data.service';
 import { LinkHeadService } from '../../core/services/link-head.service';
 import { ConfigurationDataService } from '../../core/data/configuration-data.service';
 import { ConfigurationProperty } from '../../core/shared/configuration-property.model';
+import { LinkHeadServiceStub } from '../../shared/testing/link-head-service.stub';
 
 describe('CollectionItemMapperComponent', () => {
   let comp: CollectionItemMapperComponent;
@@ -147,9 +148,7 @@ describe('CollectionItemMapperComponent', () => {
     isAuthorized: observableOf(true)
   });
 
-  const linkHeadService = jasmine.createSpyObj('linkHeadService', {
-    addTag: ''
-  });
+  let linkHeadService: LinkHeadServiceStub;
 
   const groupDataService = jasmine.createSpyObj('groupsDataService', {
     findListByHref: createSuccessfulRemoteDataObject$(createPaginatedList([])),
@@ -167,7 +166,9 @@ describe('CollectionItemMapperComponent', () => {
   });
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    linkHeadService = new LinkHeadServiceStub();
+
+    void TestBed.configureTestingModule({
       imports: [CommonModule, FormsModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), NgbModule],
       declarations: [CollectionItemMapperComponent, ItemSelectComponent, SearchFormComponent, PaginationComponent, EnumKeysPipe, VarDirective, ErrorComponent, LoadingComponent],
       providers: [

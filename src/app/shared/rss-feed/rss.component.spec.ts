@@ -17,6 +17,7 @@ import { SearchConfigurationServiceStub } from '../testing/search-configuration-
 import { PaginatedSearchOptions } from '../search/models/paginated-search-options.model';
 import { Router } from '@angular/router';
 import { RouterMock } from '../mocks/router.mock';
+import { LinkHeadServiceStub } from '../testing/link-head-service.stub';
 
 
 
@@ -26,7 +27,7 @@ describe('RssComponent', () => {
     let uuid: string;
     let query: string;
     let groupDataService: GroupDataService;
-    let linkHeadService: LinkHeadService;
+    let linkHeadService: LinkHeadServiceStub;
     let configurationDataService: ConfigurationDataService;
     let paginationService;
 
@@ -51,9 +52,7 @@ describe('RssComponent', () => {
               ]
             }))
           });
-        linkHeadService = jasmine.createSpyObj('linkHeadService', {
-            addTag: ''
-        });
+        linkHeadService = new LinkHeadServiceStub();
         const mockCollectionRD: RemoteData<Collection> = createSuccessfulRemoteDataObject(mockCollection);
         const mockSearchOptions = observableOf(new PaginatedSearchOptions({
             pagination: Object.assign(new PaginationComponentOptions(), {

@@ -61,14 +61,11 @@ describe('SubmissionSectionUploadFileEditComponent test suite', () => {
   let comp: SubmissionSectionUploadFileEditComponent;
   let compAsAny: any;
   let fixture: ComponentFixture<SubmissionSectionUploadFileEditComponent>;
-  let submissionServiceStub: SubmissionServiceStub;
   let formbuilderService: any;
-  let operationsBuilder: any;
-  let operationsService: any;
   let formService: any;
   let uploadService: any;
+  let submissionJsonPatchOperationsService: SubmissionJsonPatchOperationsServiceStub;
 
-  const submissionJsonPatchOperationsServiceStub = new SubmissionJsonPatchOperationsServiceStub();
   const submissionId = mockSubmissionId;
   const sectionId = 'upload';
   const collectionId = mockSubmissionCollectionId;
@@ -81,7 +78,11 @@ describe('SubmissionSectionUploadFileEditComponent test suite', () => {
   const pathCombiner = new JsonPatchOperationPathCombiner('sections', sectionId, 'files', fileIndex);
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    formService = getMockFormService();
+    submissionJsonPatchOperationsService = new SubmissionJsonPatchOperationsServiceStub();
+    uploadService = getMockSectionUploadService();
+
+    void TestBed.configureTestingModule({
       imports: [
         BrowserModule,
         CommonModule,
@@ -95,11 +96,11 @@ describe('SubmissionSectionUploadFileEditComponent test suite', () => {
         TestComponent
       ],
       providers: [
-        { provide: FormService, useValue: getMockFormService() },
+        { provide: FormService, useValue: formService },
         { provide: SubmissionService, useClass: SubmissionServiceStub },
-        { provide: SubmissionJsonPatchOperationsService, useValue: submissionJsonPatchOperationsServiceStub },
+        { provide: SubmissionJsonPatchOperationsService, useValue: submissionJsonPatchOperationsService },
         { provide: JsonPatchOperationsBuilder, useValue: jsonPatchOpBuilder },
-        { provide: SectionUploadService, useValue: getMockSectionUploadService() },
+        { provide: SectionUploadService, useValue: uploadService },
         FormBuilderService,
         ChangeDetectorRef,
         SubmissionSectionUploadFileEditComponent,
@@ -149,12 +150,7 @@ describe('SubmissionSectionUploadFileEditComponent test suite', () => {
       fixture = TestBed.createComponent(SubmissionSectionUploadFileEditComponent);
       comp = fixture.componentInstance;
       compAsAny = comp;
-      submissionServiceStub = TestBed.inject(SubmissionService as any);
       formbuilderService = TestBed.inject(FormBuilderService);
-      operationsBuilder = TestBed.inject(JsonPatchOperationsBuilder);
-      operationsService = TestBed.inject(SubmissionJsonPatchOperationsService);
-      formService = TestBed.inject(FormService);
-      uploadService = TestBed.inject(SectionUploadService);
 
       comp.submissionId = submissionId;
       comp.collectionId = collectionId;
@@ -237,7 +233,7 @@ describe('SubmissionSectionUploadFileEditComponent test suite', () => {
     });
 
     it('should retrieve Value From Field properly', () => {
-      let field;
+      let field = undefined;
       expect(compAsAny.retrieveValueFromField(field)).toBeUndefined();
 
       field = new FormFieldMetadataValueObject('test');
@@ -264,7 +260,7 @@ describe('SubmissionSectionUploadFileEditComponent test suite', () => {
           }
         })
       ];
-      operationsService.jsonPatchByResourceID.and.returnValue(of(response));
+      submissionJsonPatchOperationsService.jsonPatchByResourceID.and.returnValue(of(response));
 
       const accessConditionsToSave = [
         { name: 'openaccess' },
@@ -275,21 +271,21 @@ describe('SubmissionSectionUploadFileEditComponent test suite', () => {
       tick();
 
       let path = 'metadata/dc.title';
-      expect(operationsBuilder.add).toHaveBeenCalledWith(
+      expect(jsonPatchOpBuilder.add).toHaveBeenCalledWith(
         pathCombiner.getPath(path),
         mockFileFormData.metadata['dc.title'],
         true
       );
 
       path = 'metadata/dc.description';
-      expect(operationsBuilder.add).toHaveBeenCalledWith(
+      expect(jsonPatchOpBuilder.add).toHaveBeenCalledWith(
         pathCombiner.getPath(path),
         mockFileFormData.metadata['dc.description'],
         true
       );
 
       path = 'accessConditions';
-      expect(operationsBuilder.add).toHaveBeenCalledWith(
+      expect(jsonPatchOpBuilder.add).toHaveBeenCalledWith(
         pathCombiner.getPath(path),
         accessConditionsToSave,
         true

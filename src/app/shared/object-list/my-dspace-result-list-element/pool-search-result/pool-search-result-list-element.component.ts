@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { mergeMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable, Subscription } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 import { ViewMode } from '../../../../core/shared/view-mode.model';
 import { RemoteData } from '../../../../core/data/remote-data';
@@ -65,6 +65,8 @@ export class PoolSearchResultListElementComponent extends SearchResultListElemen
    */
   showThumbnails: boolean;
 
+  subs: Subscription[] = [];
+
   constructor(
     protected linkService: LinkService,
     protected truncatableService: TruncatableService,
@@ -85,7 +87,7 @@ export class PoolSearchResultListElementComponent extends SearchResultListElemen
       followLink('submitter')
     ), followLink('action'));
 
-    (this.dso.workflowitem as Observable<RemoteData<WorkflowItem>>).pipe(
+    this.subs.push((this.dso.workflowitem as Observable<RemoteData<WorkflowItem>>).pipe(
       getFirstCompletedRemoteData(),
       mergeMap((wfiRD: RemoteData<WorkflowItem>) => {
         if (wfiRD.hasSucceeded) {
@@ -97,12 +99,11 @@ export class PoolSearchResultListElementComponent extends SearchResultListElemen
           return EMPTY;
         }
       }),
-      tap((itemRD: RemoteData<Item>) => {
-        if (isNotEmpty(itemRD) && itemRD.hasSucceeded) {
-          this.item$.next(itemRD.payload);
-        }
-      })
-    ).subscribe();
+    ).subscribe((itemRD: RemoteData<Item>) => {
+      if (isNotEmpty(itemRD) && itemRD.hasSucceeded) {
+        this.item$.next(itemRD.payload);
+      }
+    }));
 
     this.showThumbnails = this.appConfig.browseBy.showThumbnails;
   }
@@ -112,5 +113,6 @@ export class PoolSearchResultListElementComponent extends SearchResultListElemen
     if (hasValue(this.dso)) {
       this.objectCache.remove(this.dso._links.workflowitem.href);
     }
+    this.subs.forEach((sub: Subscription) => sub.unsubscribe());
   }
 }

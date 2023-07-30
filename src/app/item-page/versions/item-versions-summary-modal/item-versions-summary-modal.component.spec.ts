@@ -4,6 +4,7 @@ import { ItemVersionsSummaryModalComponent } from './item-versions-summary-modal
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
 
 describe('ItemVersionsSummaryModalComponent', () => {
   let component: ItemVersionsSummaryModalComponent;
@@ -12,9 +13,13 @@ describe('ItemVersionsSummaryModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ItemVersionsSummaryModalComponent ],
-      imports: [ TranslateModule.forRoot(), RouterTestingModule.withRoutes([]) ],
+      imports: [
+        FormsModule,
+        TranslateModule.forRoot(),
+        RouterTestingModule.withRoutes([]),
+      ],
       providers: [
-        { provide: NgbActiveModal },
+        NgbActiveModal,
       ]
     }).compileComponents();
   });

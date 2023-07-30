@@ -17,12 +17,12 @@ import { BrowserOnlyMockPipe } from '../testing/browser-only-mock.pipe';
 import { SearchServiceStub } from '../testing/search-service.stub';
 import { Router } from '@angular/router';
 import { RouterStub } from '../testing/router.stub';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 describe('SearchFormComponent', () => {
   let comp: SearchFormComponent;
   let fixture: ComponentFixture<SearchFormComponent>;
   let de: DebugElement;
-  let el: HTMLElement;
 
   const router = new RouterStub();
   const searchService = new SearchServiceStub();
@@ -34,7 +34,7 @@ describe('SearchFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     return TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule, TranslateModule.forRoot()],
+      imports: [FormsModule, RouterTestingModule, TranslateModule.forRoot(), NgbModule],
       providers: [
         { provide: Router, useValue: router },
         { provide: SearchService, useValue: searchService },
@@ -53,7 +53,6 @@ describe('SearchFormComponent', () => {
     fixture = TestBed.createComponent(SearchFormComponent);
     comp = fixture.componentInstance; // SearchFormComponent test instance
     de = fixture.debugElement.query(By.css('form'));
-    el = de.nativeElement;
   });
 
   it('should not display scopes when showScopeSelector is false', fakeAsync(() => {

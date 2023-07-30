@@ -73,7 +73,7 @@ const environmentUseThumbs = {
 const rdItem = createSuccessfulRemoteDataObject(item);
 const workflowitem = Object.assign(new WorkflowItem(), { item: observableOf(rdItem) });
 const rdWorkflowitem = createSuccessfulRemoteDataObject(workflowitem);
-mockResultObject.indexableObject = Object.assign(new PoolTask(), { workflowitem: observableOf(rdWorkflowitem) });
+mockResultObject.indexableObject = Object.assign(new PoolTask(), { workflowitem: observableOf(rdWorkflowitem), _links: { workflowitem: { href: '' } } });
 const linkService = getMockLinkService();
 const objectCacheServiceMock = jasmine.createSpyObj('ObjectCacheService', {
   remove: jasmine.createSpy('remove')
@@ -81,7 +81,7 @@ const objectCacheServiceMock = jasmine.createSpyObj('ObjectCacheService', {
 
 describe('PoolSearchResultListElementComponent', () => {
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
       declarations: [PoolSearchResultListElementComponent, VarDirective],
       providers: [
@@ -97,12 +97,9 @@ describe('PoolSearchResultListElementComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     fixture = TestBed.createComponent(PoolSearchResultListElementComponent);
     component = fixture.componentInstance;
-  }));
-
-  beforeEach(() => {
     component.dso = mockResultObject.indexableObject;
     fixture.detectChanges();
   });

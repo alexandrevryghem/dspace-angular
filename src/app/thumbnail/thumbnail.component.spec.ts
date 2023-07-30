@@ -1,4 +1,4 @@
-import { DebugElement, Pipe, PipeTransform } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement, Pipe, PipeTransform } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Bitstream } from '../core/shared/bitstream.model';
@@ -27,7 +27,6 @@ describe('ThumbnailComponent', () => {
   let comp: ThumbnailComponent;
   let fixture: ComponentFixture<ThumbnailComponent>;
   let de: DebugElement;
-  let el: HTMLElement;
   let authService;
   let authorizationService;
   let fileService;
@@ -44,13 +43,14 @@ describe('ThumbnailComponent', () => {
     });
     fileService.retrieveFileDownloadLink.and.callFake((url) => observableOf(`${url}?authentication-token=fake`));
 
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       declarations: [ThumbnailComponent, SafeUrlPipe, MockTranslatePipe, VarDirective],
       providers: [
         { provide: AuthService, useValue: authService },
         { provide: AuthorizationDataService, useValue: authorizationService },
         { provide: FileService, useValue: fileService }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -62,7 +62,6 @@ describe('ThumbnailComponent', () => {
 
     comp = fixture.componentInstance; // ThumbnailComponent test instance
     de = fixture.debugElement.query(By.css('div.thumbnail'));
-    el = de.nativeElement;
   });
 
   describe('loading', () => {
@@ -126,7 +125,7 @@ describe('ThumbnailComponent', () => {
 
   });
 
-  const errorHandler = () => {
+  function errorHandler(): void {
     let setSrcSpy;
 
     beforeEach(() => {
@@ -209,7 +208,7 @@ describe('ThumbnailComponent', () => {
         expect(setSrcSpy).toHaveBeenCalledWith(comp.defaultImage);
       });
     });
-  };
+  }
 
   describe('fallback', () => {
     describe('if there is a default image', () => {

@@ -96,6 +96,10 @@ describe('ItemEditBitstreamComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    (comp as any).viewContainerRef.clear();
+  });
+
   describe('when remove is called', () => {
     beforeEach(() => {
       comp.remove();

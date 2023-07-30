@@ -21,6 +21,7 @@ import {
 } from '../../../remote-data.utils';
 import { ExportMetadataSelectorComponent } from './export-metadata-selector.component';
 import { AuthorizationDataService } from '../../../../core/data/feature-authorization/authorization-data.service';
+import { CommonModule } from '@angular/common';
 
 // No way to add entryComponents yet to testbed; alternative implemented; source: https://stackoverflow.com/questions/41689468/how-to-shallow-test-a-component-with-an-entrycomponents
 @NgModule({
@@ -31,6 +32,7 @@ import { AuthorizationDataService } from '../../../../core/data/feature-authoriz
                 useClass: TranslateLoaderMock
             }
         }),
+        CommonModule,
     ],
     exports: [],
     declarations: [ConfirmationModalComponent],

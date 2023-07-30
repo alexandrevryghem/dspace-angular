@@ -23,11 +23,11 @@ import { ConfigurationDataService } from '../../../core/data/configuration-data.
 import { SearchConfigurationService } from '../../../core/shared/search/search-configuration.service';
 import { SearchConfigurationServiceStub } from '../../testing/search-configuration-service.stub';
 import { ConfigurationProperty } from '../../../core/shared/configuration-property.model';
+import { LinkHeadServiceStub } from '../../testing/link-head-service.stub';
 
 describe('CollectionSelectComponent', () => {
   let comp: CollectionSelectComponent;
   let fixture: ComponentFixture<CollectionSelectComponent>;
-  let objectSelectService: ObjectSelectService;
 
   const mockCollectionList = [
     Object.assign(new Collection(), {
@@ -50,9 +50,7 @@ describe('CollectionSelectComponent', () => {
     isAuthorized: observableOf(true)
   });
 
-  const linkHeadService = jasmine.createSpyObj('linkHeadService', {
-    addTag: ''
-  });
+  let linkHeadService: LinkHeadServiceStub;
 
   const groupDataService = jasmine.createSpyObj('groupsDataService', {
     findListByHref: createSuccessfulRemoteDataObject$(createPaginatedList([])),
@@ -71,7 +69,9 @@ describe('CollectionSelectComponent', () => {
 
   const paginationService = new PaginationServiceStub();
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    linkHeadService = new LinkHeadServiceStub();
+
+    void TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot(), SharedModule, RouterTestingModule.withRoutes([])],
       declarations: [],
       providers: [
@@ -94,7 +94,6 @@ describe('CollectionSelectComponent', () => {
     comp.dsoRD$ = mockCollections;
     comp.paginationOptions = mockPaginationOptions;
     fixture.detectChanges();
-    objectSelectService = (comp as any).objectSelectService;
   });
 
   it(`should show a list of ${mockCollectionList.length} collections`, () => {

@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
 import { DsoEditMenuExpandableSectionComponent } from './dso-edit-menu-expandable-section.component';
 import { By } from '@angular/platform-browser';
 import { MenuItemType } from 'src/app/shared/menu/menu-item-type.model';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 describe('DsoEditMenuExpandableSectionComponent', () => {
   let component: DsoEditMenuExpandableSectionComponent;
@@ -31,8 +32,11 @@ describe('DsoEditMenuExpandableSectionComponent', () => {
   };
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
+    void TestBed.configureTestingModule({
+      imports: [
+        TranslateModule.forRoot(),
+        NgbTooltipModule,
+      ],
       declarations: [DsoEditMenuExpandableSectionComponent, TestComponent],
       providers: [
         {provide: 'sectionDataProvider', useValue: dummySection},

@@ -1,5 +1,5 @@
 import { FormService } from '../../../shared/form/form.service';
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SubmissionSectionAccessesComponent } from './section-accesses.component';
 import { SectionsService } from '../sections.service';
@@ -36,10 +36,11 @@ import {
   DynamicFormArrayModel,
   DynamicSelectModel
 } from '@ng-dynamic-forms/core';
-import { AppState } from '../../../app.reducer';
 import { getMockFormService } from '../../../shared/mocks/form-service.mock';
 import { mockAccessesFormData } from '../../../shared/mocks/submission.mock';
 import { accessConditionChangeEvent, checkboxChangeEvent } from '../../../shared/testing/form-event.stub';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('SubmissionSectionAccessesComponent', () => {
   let component: SubmissionSectionAccessesComponent;
@@ -80,10 +81,12 @@ describe('SubmissionSectionAccessesComponent', () => {
 
   describe('First with canChangeDiscoverable true', () => {
 
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    beforeEach(waitForAsync( () => {
+      void TestBed.configureTestingModule({
         imports: [
           BrowserModule,
+          FormsModule,
+          ReactiveFormsModule,
           TranslateModule.forRoot()
         ],
         declarations: [SubmissionSectionAccessesComponent, FormComponent],
@@ -100,12 +103,13 @@ describe('SubmissionSectionAccessesComponent', () => {
           { provide: 'sectionDataProvider', useValue: sectionData },
           { provide: 'submissionIdProvider', useValue: '1508' },
           FormBuilderService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
       })
         .compileComponents();
-    });
+    }));
 
-    beforeEach(inject([Store], (store: Store<AppState>) => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(SubmissionSectionAccessesComponent);
       component = fixture.componentInstance;
       formService = TestBed.inject(FormService);
@@ -114,7 +118,7 @@ describe('SubmissionSectionAccessesComponent', () => {
       formService.isValid.and.returnValue(observableOf(true));
       formService.getFormData.and.returnValue(observableOf(mockAccessesFormData));
       fixture.detectChanges();
-    }));
+    });
 
 
     it('should create', () => {
@@ -171,10 +175,12 @@ describe('SubmissionSectionAccessesComponent', () => {
 
 
 
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    beforeEach(waitForAsync(() => {
+      void TestBed.configureTestingModule({
         imports: [
           BrowserModule,
+          FormsModule,
+          ReactiveFormsModule,
           TranslateModule.forRoot()
         ],
         declarations: [SubmissionSectionAccessesComponent, FormComponent],
@@ -191,12 +197,12 @@ describe('SubmissionSectionAccessesComponent', () => {
           { provide: SubmissionJsonPatchOperationsService, useValue: SubmissionJsonPatchOperationsServiceStub },
           { provide: 'sectionDataProvider', useValue: sectionData },
           { provide: 'submissionIdProvider', useValue: '1508' },
-        ]
-      })
-        .compileComponents();
-    });
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    }));
 
-    beforeEach(inject([Store], (store: Store<AppState>) => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(SubmissionSectionAccessesComponent);
       component = fixture.componentInstance;
       formService = TestBed.inject(FormService);
@@ -204,7 +210,7 @@ describe('SubmissionSectionAccessesComponent', () => {
       formService.isValid.and.returnValue(observableOf(true));
       formService.getFormData.and.returnValue(observableOf(mockAccessesFormData));
       fixture.detectChanges();
-    }));
+    });
 
 
     it('should have formModel length should be 1', () => {

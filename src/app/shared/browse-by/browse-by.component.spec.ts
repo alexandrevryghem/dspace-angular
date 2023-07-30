@@ -46,6 +46,7 @@ import { getMockThemeService } from '../mocks/theme-service.mock';
 import { SharedModule } from '../shared.module';
 import { BrowseByRoutingModule } from '../../browse-by/browse-by-routing.module';
 import { AccessControlRoutingModule } from '../../access-control/access-control-routing.module';
+import { LinkHeadServiceStub } from '../testing/link-head-service.stub';
 
 @listableObjectComponent(BrowseEntry, ViewMode.ListElement, DEFAULT_CONTEXT, 'dspace')
 @Component({
@@ -66,9 +67,7 @@ describe('BrowseByComponent', () => {
     getUUIDFromString: '',
   });
 
-  const linkHeadService = jasmine.createSpyObj('linkHeadService', {
-    addTag: ''
-  });
+  let linkHeadService: LinkHeadServiceStub;
 
   const configurationDataService = jasmine.createSpyObj('configurationDataService', {
     findByPropertyName: createSuccessfulRemoteDataObject$(Object.assign(new ConfigurationProperty(), {
@@ -91,6 +90,8 @@ describe('BrowseByComponent', () => {
 
   beforeEach(waitForAsync(() => {
     themeService = getMockThemeService('base');
+    linkHeadService = new LinkHeadServiceStub();
+
     void TestBed.configureTestingModule({
       imports: [
         BrowseByRoutingModule,

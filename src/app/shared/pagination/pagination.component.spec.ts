@@ -1,7 +1,7 @@
 // Load the implementations that should be tested
 import { CommonModule } from '@angular/common';
 
-import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
+import { ChangeDetectorRef, Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ComponentFixture, fakeAsync, inject, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
@@ -171,7 +171,7 @@ describe('Pagination component', () => {
         ChangeDetectorRef,
         PaginationComponent
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
 
   }));

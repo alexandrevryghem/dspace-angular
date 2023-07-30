@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ChangeDetectionStrategy, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
   ComponentFixture,
   fakeAsync,
@@ -28,8 +28,6 @@ import { DSONameServiceMock } from '../../../mocks/dso-name.service.mock';
 
 let component: ClaimedTaskSearchResultDetailElementComponent;
 let fixture: ComponentFixture<ClaimedTaskSearchResultDetailElementComponent>;
-
-const compIndex = 1;
 
 const mockResultObject: ClaimedTaskSearchResult = new ClaimedTaskSearchResult();
 mockResultObject.hitHighlights = {};
@@ -66,7 +64,7 @@ const item = Object.assign(new Item(), {
 const rdItem = createSuccessfulRemoteDataObject(item);
 const workflowitem = Object.assign(new WorkflowItem(), { item: observableOf(rdItem) });
 const rdWorkflowitem = createSuccessfulRemoteDataObject(workflowitem);
-mockResultObject.indexableObject = Object.assign(new ClaimedTask(), { workflowitem: observableOf(rdWorkflowitem) });
+mockResultObject.indexableObject = Object.assign(new ClaimedTask(), { workflowitem: observableOf(rdWorkflowitem), _links: { workflowitem: { href: '' } } });
 const linkService = getMockLinkService();
 const objectCacheServiceMock = jasmine.createSpyObj('ObjectCacheService', {
   remove: jasmine.createSpy('remove')
@@ -74,7 +72,7 @@ const objectCacheServiceMock = jasmine.createSpyObj('ObjectCacheService', {
 
 describe('ClaimedTaskSearchResultDetailElementComponent', () => {
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
       declarations: [ClaimedTaskSearchResultDetailElementComponent, VarDirective],
       providers: [
@@ -82,18 +80,15 @@ describe('ClaimedTaskSearchResultDetailElementComponent', () => {
         { provide: LinkService, useValue: linkService },
         { provide: ObjectCacheService, useValue: objectCacheServiceMock }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).overrideComponent(ClaimedTaskSearchResultDetailElementComponent, {
       set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     fixture = TestBed.createComponent(ClaimedTaskSearchResultDetailElementComponent);
     component = fixture.componentInstance;
-  }));
-
-  beforeEach(() => {
     component.dso = mockResultObject.indexableObject;
     fixture.detectChanges();
   });

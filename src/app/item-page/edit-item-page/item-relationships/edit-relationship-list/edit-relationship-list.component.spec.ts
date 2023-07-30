@@ -32,6 +32,7 @@ import { ConfigurationProperty } from '../../../../core/shared/configuration-pro
 import { Router } from '@angular/router';
 import { RouterMock } from '../../../../shared/mocks/router.mock';
 import { APP_CONFIG } from '../../../../../config/app-config.interface';
+import { LinkHeadServiceStub } from '../../../../shared/testing/link-head-service.stub';
 
 let comp: EditRelationshipListComponent;
 let fixture: ComponentFixture<EditRelationshipListComponent>;
@@ -43,6 +44,7 @@ let relationshipService;
 let selectableListService;
 let paginationService;
 let hostWindowService;
+let linkHeadService: LinkHeadServiceStub;
 const relationshipTypeService = {};
 
 const url = 'http://test-url.com/test-url';
@@ -183,9 +185,7 @@ describe('EditRelationshipListComponent', () => {
 
     hostWindowService = new HostWindowServiceStub(1200);
 
-    const linkHeadService = jasmine.createSpyObj('linkHeadService', {
-      addTag: ''
-    });
+    linkHeadService = new LinkHeadServiceStub();
 
     const groupDataService = jasmine.createSpyObj('groupsDataService', {
       findListByHref: createSuccessfulRemoteDataObject$(createPaginatedList([])),

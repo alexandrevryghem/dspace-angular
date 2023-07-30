@@ -31,6 +31,7 @@ import { createPaginatedList } from '../../shared/testing/utils.test';
 import { SearchConfigurationServiceStub } from '../../shared/testing/search-configuration-service.stub';
 import { APP_CONFIG } from 'src/config/app-config.interface';
 import { environment } from 'src/environments/environment.test';
+import { LinkHeadServiceStub } from '../../shared/testing/link-head-service.stub';
 
 describe('TopLevelCommunityListComponent', () => {
   let comp: TopLevelCommunityListComponent;
@@ -120,9 +121,7 @@ describe('TopLevelCommunityListComponent', () => {
 
   themeService = getMockThemeService();
 
-  const linkHeadService = jasmine.createSpyObj('linkHeadService', {
-    addTag: ''
-  });
+  let linkHeadService: LinkHeadServiceStub;
 
   const groupDataService = jasmine.createSpyObj('groupsDataService', {
     findListByHref: createSuccessfulRemoteDataObject$(createPaginatedList([])),
@@ -140,7 +139,9 @@ describe('TopLevelCommunityListComponent', () => {
   });
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    linkHeadService = new LinkHeadServiceStub();
+
+    void TestBed.configureTestingModule({
       imports: [
         TranslateModule.forRoot(),
         SharedModule,

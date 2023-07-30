@@ -24,12 +24,13 @@ import { LinkHeadService } from '../../../core/services/link-head.service';
 import { GroupDataService } from '../../../core/eperson/group-data.service';
 import { SearchConfigurationServiceStub } from '../../testing/search-configuration-service.stub';
 import { ConfigurationProperty } from '../../../core/shared/configuration-property.model';
+import { LinkHeadServiceStub } from '../../testing/link-head-service.stub';
 
 describe('ItemSelectComponent', () => {
   let comp: ItemSelectComponent;
   let fixture: ComponentFixture<ItemSelectComponent>;
-  let objectSelectService: ObjectSelectService;
-  let paginationService;
+  let paginationService: PaginationServiceStub;
+  let objectSelectService: ObjectSelectServiceStub;
 
   const mockItemList = [
     Object.assign(new Item(), {
@@ -76,9 +77,7 @@ describe('ItemSelectComponent', () => {
 
   const authorizationDataService = new AuthorizationDataService(null, null, null, null, null);
 
-  const linkHeadService = jasmine.createSpyObj('linkHeadService', {
-    addTag: ''
-  });
+  let linkHeadService: LinkHeadServiceStub;
 
   const groupDataService = jasmine.createSpyObj('groupsDataService', {
     findListByHref: createSuccessfulRemoteDataObject$(createPaginatedList([])),
@@ -96,11 +95,14 @@ describe('ItemSelectComponent', () => {
   });
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    linkHeadService = new LinkHeadServiceStub();
+    objectSelectService = new ObjectSelectServiceStub([mockItemList[1].id]);
+
+    void TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot(), SharedModule, RouterTestingModule.withRoutes([])],
       declarations: [],
       providers: [
-        { provide: ObjectSelectService, useValue: new ObjectSelectServiceStub([mockItemList[1].id]) },
+        { provide: ObjectSelectService, useValue: objectSelectService },
         { provide: HostWindowService, useValue: new HostWindowServiceStub(0) },
         { provide: PaginationService, useValue: paginationService },
         { provide: AuthorizationDataService, useValue: authorizationDataService },
@@ -119,7 +121,6 @@ describe('ItemSelectComponent', () => {
     comp.dsoRD$ = mockItems;
     comp.paginationOptions = mockPaginationOptions;
     fixture.detectChanges();
-    objectSelectService = (comp as any).objectSelectService;
   });
 
   it(`should show a list of ${mockItemList.length} items`, () => {
@@ -145,9 +146,9 @@ describe('ItemSelectComponent', () => {
     });
 
     it('should switch the value through object-select-service', () => {
-      spyOn((comp as any).objectSelectService, 'switch').and.callThrough();
+      spyOn(objectSelectService, 'switch').and.callThrough();
       checkbox.click();
-      expect((comp as any).objectSelectService.switch).toHaveBeenCalled();
+      expect(objectSelectService.switch).toHaveBeenCalled();
     });
   });
 
@@ -186,13 +187,12 @@ describe('ItemSelectComponent', () => {
       spyOn(authorizationDataService, 'isAuthorized').and.returnValue(of(false));
     });
 
-    it('should disable the checkbox', waitForAsync(() => {
+    it('should disable the checkbox', async () => {
       fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        const checkbox = fixture.debugElement.query(By.css('input.item-checkbox')).nativeElement;
-        expect(authorizationDataService.isAuthorized).toHaveBeenCalled();
-        expect(checkbox.disabled).toBeTrue();
-      });
-    }));
+      await fixture.whenStable();
+      const checkbox = fixture.debugElement.query(By.css('input.item-checkbox')).nativeElement;
+      expect(authorizationDataService.isAuthorized).toHaveBeenCalled();
+      expect(checkbox.disabled).toBeTrue();
+    });
   });
 });

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SearchService } from 'src/app/core/shared/search/search.service';
 import { createSuccessfulRemoteDataObject } from 'src/app/shared/remote-data.utils';
 import { SearchServiceStub } from 'src/app/shared/testing/search-service.stub';
@@ -14,18 +14,14 @@ import { of as observableOf } from 'rxjs';
 import { APP_CONFIG } from '../../../config/app-config.interface';
 import { environment } from '../../../environments/environment';
 import { PLATFORM_ID } from '@angular/core';
+import { VarDirective } from '../../shared/utils/var.directive';
 
 describe('RecentItemListComponent', () => {
   let component: RecentItemListComponent;
   let fixture: ComponentFixture<RecentItemListComponent>;
   const emptyList = createSuccessfulRemoteDataObject(createPaginatedList([]));
   let paginationService;
-  const searchServiceStub = Object.assign(new SearchServiceStub(), {
-    search: () => observableOf(emptyList),
-    /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
-    clearDiscoveryRequests: () => {}
-    /* eslint-enable no-empty,@typescript-eslint/no-empty-function */
-  });
+  let searchService: SearchServiceStub;
   paginationService = new PaginationServiceStub();
   const mockSearchOptions = observableOf(new PaginatedSearchOptions({
     pagination: Object.assign(new PaginationComponentOptions(), {
@@ -38,11 +34,15 @@ describe('RecentItemListComponent', () => {
   const searchConfigServiceStub = {
     paginatedSearchOptions: mockSearchOptions
   };
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ RecentItemListComponent],
+  beforeEach(waitForAsync(() => {
+    searchService = new SearchServiceStub();
+    void TestBed.configureTestingModule({
+      declarations: [
+        RecentItemListComponent,
+        VarDirective,
+      ],
       providers: [
-        { provide: SearchService, useValue: searchServiceStub },
+        { provide: SearchService, useValue: searchService },
         { provide: PaginationService, useValue: paginationService },
         { provide: SearchConfigurationService, useValue: searchConfigServiceStub },
         { provide: APP_CONFIG, useValue: environment },
@@ -50,11 +50,12 @@ describe('RecentItemListComponent', () => {
       ],
     })
     .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RecentItemListComponent);
     component = fixture.componentInstance;
+    spyOn(searchService, 'search').and.returnValue(observableOf(emptyList));
     fixture.detectChanges();
   });
 

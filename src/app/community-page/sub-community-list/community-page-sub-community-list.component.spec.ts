@@ -29,6 +29,7 @@ import { SearchConfigurationService } from '../../core/shared/search/search-conf
 import { SearchConfigurationServiceStub } from '../../shared/testing/search-configuration-service.stub';
 import { ConfigurationProperty } from '../../core/shared/configuration-property.model';
 import { createPaginatedList } from '../../shared/testing/utils.test';
+import { LinkHeadServiceStub } from '../../shared/testing/link-head-service.stub';
 
 describe('CommunityPageSubCommunityListComponent', () => {
   let comp: CommunityPageSubCommunityListComponent;
@@ -123,9 +124,7 @@ describe('CommunityPageSubCommunityListComponent', () => {
     }
   };
 
-  const linkHeadService = jasmine.createSpyObj('linkHeadService', {
-    addTag: ''
-  });
+  let linkHeadService: LinkHeadServiceStub;
 
   const groupDataService = jasmine.createSpyObj('groupsDataService', {
     findListByHref: createSuccessfulRemoteDataObject$(createPaginatedList([])),
@@ -147,7 +146,9 @@ describe('CommunityPageSubCommunityListComponent', () => {
   themeService = getMockThemeService();
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    linkHeadService = new LinkHeadServiceStub();
+
+    void TestBed.configureTestingModule({
       imports: [
         TranslateModule.forRoot(),
         SharedModule,

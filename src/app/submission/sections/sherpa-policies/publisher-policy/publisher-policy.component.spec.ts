@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { PublisherPolicyComponent } from './publisher-policy.component';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { SherpaDataResponse } from '../../../../shared/mocks/section-sherpa-policies.service.mock';
@@ -12,8 +12,8 @@ describe('PublisherPolicyComponent', () => {
   let fixture: ComponentFixture<PublisherPolicyComponent>;
   let de: DebugElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    void TestBed.configureTestingModule({
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -23,9 +23,9 @@ describe('PublisherPolicyComponent', () => {
         }),
       ],
       declarations: [PublisherPolicyComponent],
-    })
-      .compileComponents();
-  });
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisherPolicyComponent);

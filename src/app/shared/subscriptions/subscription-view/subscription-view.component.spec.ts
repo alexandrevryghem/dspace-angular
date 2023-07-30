@@ -1,19 +1,18 @@
-import { ComponentFixture, ComponentFixtureAutoDetect, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 // Import modules
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, By } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { By } from '@angular/platform-browser';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { SubscriptionViewComponent } from './subscription-view.component';
 
 // Import mocks
 import { TranslateLoaderMock } from '../../mocks/translate-loader.mock';
-import { findByEPersonAndDsoResEmpty, subscriptionMock } from '../../testing/subscriptions-data.mock';
+import { subscriptionMock } from '../../testing/subscriptions-data.mock';
 
 // Import utils
 import { NotificationsService } from '../../notifications/notifications.service';
@@ -21,23 +20,18 @@ import { NotificationsServiceStub } from '../../testing/notifications-service.st
 import { SubscriptionsDataService } from '../subscriptions-data.service';
 import { Subscription } from '../models/subscription.model';
 
-import { of as observableOf } from 'rxjs';
-
-import { createSuccessfulRemoteDataObject$ } from '../../remote-data.utils';
 import { Item } from '../../../core/shared/item.model';
 import { ITEM } from '../../../core/shared/item.resource-type';
+import { SubscriptionsDataServiceStub } from '../../testing/subscriptions-data.service.stub';
+import { AuthService } from '../../../core/auth/auth.service';
+import { AuthServiceStub } from '../../testing/auth-service.stub';
+import { SubscriptionModalComponent } from '../subscription-modal/subscription-modal.component';
 
 describe('SubscriptionViewComponent', () => {
   let component: SubscriptionViewComponent;
   let fixture: ComponentFixture<SubscriptionViewComponent>;
   let de: DebugElement;
-  let modalService;
-
-  const subscriptionServiceStub = jasmine.createSpyObj('SubscriptionsDataService', {
-    getSubscriptionByPersonDSO: observableOf(findByEPersonAndDsoResEmpty),
-    deleteSubscription: createSuccessfulRemoteDataObject$({}),
-    updateSubscription: createSuccessfulRemoteDataObject$({}),
-  });
+  let modalService: NgbModal;
 
   const mockItem = Object.assign(new Item(), {
     id: 'fake-id',
@@ -52,13 +46,11 @@ describe('SubscriptionViewComponent', () => {
     }
   });
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    void TestBed.configureTestingModule({
       imports: [
-        CommonModule,
         NgbModule,
         ReactiveFormsModule,
-        BrowserModule,
         RouterTestingModule,
         TranslateModule.forRoot({
           loader: {
@@ -67,18 +59,22 @@ describe('SubscriptionViewComponent', () => {
           }
         }),
       ],
-      declarations: [ SubscriptionViewComponent ],
-      providers: [
-        { provide: ComponentFixtureAutoDetect, useValue: true },
-        { provide: NotificationsService, useValue: NotificationsServiceStub },
-        { provide: SubscriptionsDataService, useValue: subscriptionServiceStub },
+      declarations: [
+        SubscriptionViewComponent,
+        SubscriptionModalComponent,
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [
+        { provide: AuthService, useClass: AuthServiceStub },
+        { provide: NotificationsService, useValue: NotificationsServiceStub },
+        { provide: SubscriptionsDataService, useClass: SubscriptionsDataServiceStub },
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
+    modalService = TestBed.inject(NgbModal);
     fixture = TestBed.createComponent(SubscriptionViewComponent);
     component = fixture.componentInstance;
     component.eperson = 'testid123';
@@ -111,8 +107,7 @@ describe('SubscriptionViewComponent', () => {
   });
 
   it('should open modal when clicked edit button', () => {
-    modalService = (component as any).modalService;
-    const modalSpy = spyOn(modalService, 'open');
+    spyOn(modalService, 'open').and.callThrough();
 
     const editBtn = de.query(By.css('.btn-outline-primary')).nativeElement;
     editBtn.click();
@@ -121,12 +116,12 @@ describe('SubscriptionViewComponent', () => {
   });
 
   it('should call delete function when clicked delete button', () => {
-    const deleteSpy = spyOn(component, 'deleteSubscriptionPopup');
+    spyOn(component, 'deleteSubscriptionPopup').and.callThrough();
 
     const deleteBtn = de.query(By.css('.btn-outline-danger')).nativeElement;
     deleteBtn.click();
 
-    expect(deleteSpy).toHaveBeenCalled();
+    expect(component.deleteSubscriptionPopup).toHaveBeenCalled();
   });
 
 });

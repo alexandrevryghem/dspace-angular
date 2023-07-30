@@ -8,8 +8,6 @@ import { Store, StoreModule } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { LogInPasswordComponent } from './log-in-password.component';
-import { EPerson } from '../../../../core/eperson/models/eperson.model';
-import { EPersonMock } from '../../../testing/eperson.mock';
 import { authReducer } from '../../../../core/auth/auth.reducer';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { AuthServiceStub } from '../../../testing/auth-service.stub';
@@ -24,13 +22,10 @@ describe('LogInPasswordComponent', () => {
   let component: LogInPasswordComponent;
   let fixture: ComponentFixture<LogInPasswordComponent>;
   let page: Page;
-  let user: EPerson;
   let initialState: any;
   let hardRedirectService: HardRedirectService;
 
-  beforeEach(() => {
-    user = EPersonMock;
-
+  beforeEach(waitForAsync(() => {
     hardRedirectService = jasmine.createSpyObj('hardRedirectService', {
       getCurrentRoute: {}
     });
@@ -46,11 +41,9 @@ describe('LogInPasswordComponent', () => {
         }
       }
     };
-  });
 
-  beforeEach(waitForAsync(() => {
     // refine the test module by declaring the test component
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -76,7 +69,7 @@ describe('LogInPasswordComponent', () => {
 
   }));
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // create component and test fixture
     fixture = TestBed.createComponent(LogInPasswordComponent);
 
@@ -87,9 +80,8 @@ describe('LogInPasswordComponent', () => {
     page = new Page(component, fixture);
 
     // verify the fixture is stable (no pending tasks)
-    fixture.whenStable().then(() => {
-      page.addPageElements();
-    });
+    await fixture.whenStable();
+    page.addPageElements();
 
   });
 

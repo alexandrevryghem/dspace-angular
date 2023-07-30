@@ -28,6 +28,7 @@ import { NotificationsService } from '../../shared/notifications/notifications.s
 import { TranslateService } from '@ngx-translate/core';
 import { followLink } from '../../shared/utils/follow-link-config.model';
 import { isPlatformBrowser } from '@angular/common';
+import { NoContent } from '../../core/shared/NoContent.model';
 
 @Component({
   selector: 'ds-process-detail',
@@ -86,6 +87,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   protected modalRef: NgbModalRef;
 
   private refreshTimerSub?: Subscription;
+
+  subs: Subscription[] = [];
 
   constructor(
     @Inject(PLATFORM_ID) protected platformId: object,
@@ -249,17 +252,17 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
    * @param process
    */
   deleteProcess(process: Process) {
-    this.processService.delete(process.processId).pipe(
+    this.subs.push(this.processService.delete(process.processId).pipe(
       getFirstCompletedRemoteData()
-    ).subscribe((rd) => {
+    ).subscribe((rd: RemoteData<NoContent>) => {
       if (rd.hasSucceeded) {
         this.notificationsService.success(this.translateService.get('process.detail.delete.success'));
         this.closeModal();
-        this.router.navigateByUrl(getProcessListRoute());
+        void this.router.navigateByUrl(getProcessListRoute());
       } else {
         this.notificationsService.error(this.translateService.get('process.detail.delete.error'));
       }
-    });
+    }));
   }
 
   /**
@@ -279,5 +282,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopRefreshTimer();
+    this.subs.forEach((sub: Subscription) => sub.unsubscribe());
   }
 }
