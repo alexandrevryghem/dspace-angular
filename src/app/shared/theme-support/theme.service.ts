@@ -1,17 +1,13 @@
 import { Injectable, Inject, Injector } from '@angular/core';
 import { Store, createFeatureSelector, createSelector, select } from '@ngrx/store';
-import { BehaviorSubject, EMPTY, Observable, of as observableOf } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of as observableOf, from } from 'rxjs';
 import { ThemeState } from './theme.reducer';
 import { SetThemeAction, ThemeActionTypes } from './theme.actions';
-import { expand, filter, map, switchMap, take, toArray } from 'rxjs/operators';
+import { expand, filter, map, switchMap, take, toArray, first, mergeMap } from 'rxjs/operators';
 import { hasNoValue, hasValue, isNotEmpty } from '../empty.util';
 import { RemoteData } from '../../core/data/remote-data';
 import { DSpaceObject } from '../../core/shared/dspace-object.model';
-import {
-  getFirstCompletedRemoteData,
-  getFirstSucceededRemoteData,
-  getRemoteDataPayload
-} from '../../core/shared/operators';
+import { getFirstCompletedRemoteData, getFirstSucceededRemoteData, getRemoteDataPayload } from '../../core/shared/operators';
 import { HeadTagConfig, Theme, ThemeConfig, themeFactory } from '../../../config/theme.model';
 import { NO_OP_ACTION_TYPE, NoOpAction } from '../ngrx/no-op.action';
 import { followLink } from '../utils/follow-link-config.model';
@@ -219,7 +215,7 @@ export class ThemeService {
     // create new head tags (not yet added to DOM)
     const headTagFragment = this.document.createDocumentFragment();
     this.createHeadTags(themeName)
-        .forEach(newHeadTag => headTagFragment.appendChild(newHeadTag));
+      .forEach(newHeadTag => headTagFragment.appendChild(newHeadTag));
 
     // add new head tags to DOM
     head.appendChild(headTagFragment);
@@ -268,7 +264,7 @@ export class ThemeService {
 
     if (hasValue(headTagConfig.attributes)) {
       Object.entries(headTagConfig.attributes)
-            .forEach(([key, value]) => tag.setAttribute(key, value));
+        .forEach(([key, value]) => tag.setAttribute(key, value));
     }
 
     // 'class' attribute should always be 'theme-head-tag' for removal
@@ -302,8 +298,10 @@ export class ThemeService {
               // Start with the resolved dso and go recursively through its parents until you reach the top-level community
               return observableOf(dsoRD.payload).pipe(
                 this.getAncestorDSOs(),
-                map((dsos: DSpaceObject[]) => {
-                  const dsoMatch = this.matchThemeToDSOs(dsos, currentRouteUrl);
+                switchMap((dsos: DSpaceObject[]) => {
+                  return this.matchThemeToDSOs(dsos, currentRouteUrl);
+                }),
+                map((dsoMatch: Theme) => {
                   return this.getActionForMatch(dsoMatch, currentTheme);
                 })
               );
@@ -316,8 +314,10 @@ export class ThemeService {
               getFirstSucceededRemoteData(),
               getRemoteDataPayload(),
               this.getAncestorDSOs(),
-              map((dsos: DSpaceObject[]) => {
-                const dsoMatch = this.matchThemeToDSOs(dsos, currentRouteUrl);
+              switchMap((dsos: DSpaceObject[]) => {
+                return this.matchThemeToDSOs(dsos, currentRouteUrl);
+              }),
+              map((dsoMatch: Theme) => {
                 return this.getActionForMatch(dsoMatch, currentTheme);
               })
             );
@@ -433,14 +433,17 @@ export class ThemeService {
    * @param currentRouteUrl The url for the current route
    * @private
    */
-  private matchThemeToDSOs(dsos: DSpaceObject[], currentRouteUrl: string): Theme {
-    // iterate over the themes in order, and return the first one that matches
-    return this.themes.find((theme: Theme) => {
-      // iterate over the dsos's in order (most specific one first, so Item, Collection,
-      // Community), and return the first one that matches the current theme
-      const match = dsos.find((dso: DSpaceObject) => theme.matches(currentRouteUrl, dso));
-      return hasValue(match);
-    });
+  private matchThemeToDSOs(dsos: DSpaceObject[], currentRouteUrl: string): Observable<Theme> {
+    return from(this.themes).pipe(
+      mergeMap((theme: Theme) => from(dsos).pipe(
+          mergeMap((dso: DSpaceObject) => theme.matches(currentRouteUrl, dso)),
+          first(match => match === true, undefined),
+          map(match => match ? theme : null),
+        ),
+        1, // only process one dso at a time
+      ),
+      first(matchingTheme => matchingTheme !== null, undefined),
+    );
   }
 
   /**
