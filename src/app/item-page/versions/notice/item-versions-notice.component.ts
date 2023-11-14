@@ -60,7 +60,9 @@ export class ItemVersionsNoticeComponent implements OnInit {
    */
   public AlertTypeEnum = AlertType;
 
-  constructor(private versionHistoryService: VersionHistoryDataService) {
+  constructor(
+    protected versionHistoryService: VersionHistoryDataService,
+  ) {
   }
 
   /**

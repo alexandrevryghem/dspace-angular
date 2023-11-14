@@ -2,7 +2,7 @@
   <div class="item-page" *ngIf="itemRD?.hasSucceeded" @fadeInOut>
     <div *ngIf="itemRD?.payload as item">
       <ds-themed-item-alerts [item]="item"></ds-themed-item-alerts>
-      <ds-item-versions-notice [item]="item"></ds-item-versions-notice>
+      <ds-themed-item-versions-notice [item]="item"></ds-themed-item-versions-notice>
       <ds-view-tracker [object]="item"></ds-view-tracker>
       <div *ngIf="!item.isWithdrawn || (isAdmin$|async)" class="full-item-info">
         <div class="d-flex flex-row">
