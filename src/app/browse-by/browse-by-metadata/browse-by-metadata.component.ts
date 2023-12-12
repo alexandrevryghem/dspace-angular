@@ -24,9 +24,9 @@ import { BrowseByDataType } from '../browse-by-switcher/browse-by-data-type';
 export const BBM_PAGINATION_ID = 'bbm';
 
 @Component({
-  selector: 'ds-browse-by-metadata-page',
-  styleUrls: ['./browse-by-metadata-page.component.scss'],
-  templateUrl: './browse-by-metadata-page.component.html'
+  selector: 'ds-browse-by-metadata',
+  styleUrls: ['./browse-by-metadata.component.scss'],
+  templateUrl: './browse-by-metadata.component.html',
 })
 /**
  * Component for browsing (items) by metadata definition.
@@ -35,7 +35,7 @@ export const BBM_PAGINATION_ID = 'bbm';
  * 'dc.contributor.*'
  */
 @rendersBrowseBy(BrowseByDataType.Metadata)
-export class BrowseByMetadataPageComponent extends AbstractBrowseByTypeComponent implements OnInit, OnDestroy {
+export class BrowseByMetadataComponent extends AbstractBrowseByTypeComponent implements OnInit, OnDestroy {
 
   /**
    * The list of browse-entries to display

@@ -11,15 +11,15 @@ import { AbstractBrowseByTypeComponent } from '../abstract-browse-by-type.compon
 import { BrowseByDataType } from '../browse-by-switcher/browse-by-data-type';
 
 @Component({
-  selector: 'ds-browse-by-taxonomy-page',
-  templateUrl: './browse-by-taxonomy-page.component.html',
-  styleUrls: ['./browse-by-taxonomy-page.component.scss']
+  selector: 'ds-browse-by-taxonomy',
+  templateUrl: './browse-by-taxonomy.component.html',
+  styleUrls: ['./browse-by-taxonomy.component.scss'],
 })
 /**
  * Component for browsing items by metadata in a hierarchical controlled vocabulary
  */
 @rendersBrowseBy(BrowseByDataType.Hierarchy)
-export class BrowseByTaxonomyPageComponent extends AbstractBrowseByTypeComponent implements OnInit, OnDestroy {
+export class BrowseByTaxonomyComponent extends AbstractBrowseByTypeComponent implements OnInit, OnDestroy {
 
   /**
    * The {@link VocabularyOptions} object
