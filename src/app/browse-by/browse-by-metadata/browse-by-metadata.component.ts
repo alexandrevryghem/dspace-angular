@@ -131,12 +131,12 @@ export class BrowseByMetadataComponent extends AbstractBrowseByTypeComponent imp
     this.currentPagination$ = this.paginationService.getCurrentPagination(this.paginationConfig.id, this.paginationConfig);
     this.currentSort$ = this.paginationService.getCurrentSort(this.paginationConfig.id, sortConfig);
     this.subs.push(
-      observableCombineLatest([this.route.params, this.route.queryParams, this.currentPagination$, this.currentSort$]).pipe(
-        map(([routeParams, queryParams, currentPage, currentSort]) => {
-          return [Object.assign({}, routeParams, queryParams),currentPage,currentSort];
+      observableCombineLatest([this.route.params, this.route.queryParams, this.scope$, this.currentPagination$, this.currentSort$]).pipe(
+        map(([routeParams, queryParams, scope, currentPage, currentSort]) => {
+          return [Object.assign({}, routeParams, queryParams), scope, currentPage, currentSort];
         })
-      ).subscribe(([params, currentPage, currentSort]: [Params, PaginationComponentOptions, SortOptions]) => {
-          this.browseId = params.id || this.defaultBrowseId;
+      ).subscribe(([params, scope, currentPage, currentSort]: [Params, string, PaginationComponentOptions, SortOptions]) => {
+        this.browseId = params.id || this.defaultBrowseId;
           this.authority = params.authority;
 
           if (typeof params.value === 'string'){
@@ -150,10 +150,9 @@ export class BrowseByMetadataComponent extends AbstractBrowseByTypeComponent imp
           }
 
           if (isNotEmpty(this.value)) {
-            this.updatePageWithItems(
-              browseParamsToOptions(params, currentPage, currentSort, this.browseId, this.fetchThumbnails), this.value, this.authority);
+            this.updatePageWithItems(browseParamsToOptions(params, scope, currentPage, currentSort, this.browseId, this.fetchThumbnails), this.value, this.authority);
           } else {
-            this.updatePage(browseParamsToOptions(params, currentPage, currentSort, this.browseId, false));
+            this.updatePage(browseParamsToOptions(params, scope, currentPage, currentSort, this.browseId, false));
           }
         }));
     this.updateStartsWithTextOptions();
@@ -254,12 +253,14 @@ export function getBrowseSearchOptions(defaultBrowseId: string,
 /**
  * Function to transform query and url parameters into searchOptions used to fetch browse entries or items
  * @param params            URL and query parameters
+ * @param scope             The scope to show the results
  * @param paginationConfig  Pagination configuration
  * @param sortConfig        Sorting configuration
  * @param metadata          Optional metadata definition to fetch browse entries/items for
  * @param fetchThumbnail   Optional parameter for requesting thumbnail images
  */
 export function browseParamsToOptions(params: any,
+                                      scope: string,
                                       paginationConfig: PaginationComponentOptions,
                                       sortConfig: SortOptions,
                                       metadata?: string,
@@ -269,7 +270,7 @@ export function browseParamsToOptions(params: any,
     paginationConfig,
     sortConfig,
     params.startsWith,
-    params.scope,
+    scope,
     fetchThumbnail
   );
 }
