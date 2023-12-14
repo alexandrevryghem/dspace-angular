@@ -192,7 +192,7 @@ export class VocabularyService {
   getVocabularyEntriesByValue(value: string, exact: boolean, vocabularyOptions: VocabularyOptions, pageInfo: PageInfo): Observable<RemoteData<PaginatedList<VocabularyEntry>>> {
     const options: VocabularyFindOptions = new VocabularyFindOptions(
       null,
-      value,
+      encodeURIComponent(value),
       exact,
       null,
       pageInfo.elementsPerPage,
