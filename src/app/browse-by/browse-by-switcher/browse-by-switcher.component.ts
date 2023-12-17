@@ -13,6 +13,8 @@ export class BrowseBySwitcherComponent extends AbstractComponentLoaderComponent<
 
   @Input() browseByType: BrowseByDataType;
 
+  @Input() displayTitle: boolean;
+
   @Input() scope: string;
 
   protected inputNamesDependentForComponent: (keyof this & string)[] = [
@@ -23,6 +25,7 @@ export class BrowseBySwitcherComponent extends AbstractComponentLoaderComponent<
   protected inputNames: (keyof this & string)[] = [
     ...this.inputNames,
     'browseByType',
+    'displayTitle',
     'scope',
   ];
 
