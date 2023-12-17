@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { VocabularyOptions } from '../../core/submission/vocabularies/models/vocabulary-options.model';
 import { VocabularyEntryDetail } from '../../core/submission/vocabularies/models/vocabulary-entry-detail.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BrowseDefinition } from '../../core/shared/browse-definition.model';
 import { rendersBrowseBy } from '../browse-by-switcher/browse-by-decorator';
@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { HierarchicalBrowseDefinition } from '../../core/shared/hierarchical-browse-definition.model';
 import { AbstractBrowseByTypeComponent } from '../abstract-browse-by-type.component';
 import { BrowseByDataType } from '../browse-by-switcher/browse-by-data-type';
+import { hasValue } from '../../shared/empty.util';
 
 @Component({
   selector: 'ds-browse-by-taxonomy',
@@ -49,7 +50,7 @@ export class BrowseByTaxonomyComponent extends AbstractBrowseByTypeComponent imp
   /**
    * The parameters used in the URL
    */
-  queryParams: any;
+  queryParams: Params;
 
   /**
    * Resolved browse-by definition
@@ -73,6 +74,9 @@ export class BrowseByTaxonomyComponent extends AbstractBrowseByTypeComponent imp
       this.vocabularyName = browseDefinition.vocabulary;
       this.vocabularyOptions = { name: this.vocabularyName, closed: true };
     }));
+    this.subs.push(this.scope$.subscribe(() => {
+      this.updateQueryParams();
+    }));
   }
 
   /**
@@ -82,9 +86,9 @@ export class BrowseByTaxonomyComponent extends AbstractBrowseByTypeComponent imp
    * @param detail VocabularyEntryDetail to be added
    */
   onSelect(detail: VocabularyEntryDetail): void {
-      this.selectedItems.push(detail);
-      this.filterValues = this.selectedItems
-        .map((item: VocabularyEntryDetail) => `${item.value},equals`);
+    this.selectedItems.push(detail);
+    this.filterValues = this.selectedItems
+      .map((item: VocabularyEntryDetail) => `${item.value},equals`);
     this.updateQueryParams();
   }
 
@@ -94,18 +98,25 @@ export class BrowseByTaxonomyComponent extends AbstractBrowseByTypeComponent imp
    * @param detail VocabularyEntryDetail to be removed
    */
   onDeselect(detail: VocabularyEntryDetail): void {
-    this.selectedItems = this.selectedItems.filter((entry: VocabularyEntryDetail) => { return entry.id !== detail.id; });
-    this.filterValues = this.filterValues.filter((value: string) => { return value !== `${detail.value},equals`; });
+    this.selectedItems = this.selectedItems.filter((entry: VocabularyEntryDetail) => {
+      return entry.id !== detail.id;
+    });
+    this.filterValues = this.filterValues.filter((value: string) => {
+      return value !== `${detail.value},equals`;
+    });
     this.updateQueryParams();
   }
 
   /**
    * Updates queryParams based on the current facetType and filterValues.
    */
-  private updateQueryParams(): void {
+  updateQueryParams(): void {
     this.queryParams = {
       ['f.' + this.facetType]: this.filterValues
     };
+    if (hasValue(this.scope)) {
+      this.queryParams.scope = this.scope;
+    }
   }
 
 }
