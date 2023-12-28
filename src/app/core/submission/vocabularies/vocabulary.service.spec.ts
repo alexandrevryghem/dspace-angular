@@ -365,6 +365,18 @@ describe('VocabularyService', () => {
             })
           }));
         });
+
+        it('should encode the value', () => {
+          scheduler.schedule(() => service.getVocabularyEntriesByValue('https://creativecommons.org/licenses/by-sa/4.0/', false, vocabularyOptions, pageInfo).subscribe());
+          scheduler.flush();
+
+          expect(service.findVocabularyById).toHaveBeenCalledWith(vocabularyOptions.name, true, true, jasmine.objectContaining({
+            findListOptions: jasmine.objectContaining({
+              filter: 'https%3A%2F%2Fcreativecommons.org%2Flicenses%2Fby-sa%2F4.0%2F',
+              exact: false,
+            })
+          }));
+        });
       });
 
       describe('getVocabularyEntryByValue', () => {
