@@ -25,7 +25,7 @@ import { DSOEditMenuResolver } from '../shared/dso-page/dso-edit-menu.resolver';
 import { ComcolBrowseByComponent } from '../shared/comcol/sections/comcol-browse-by/comcol-browse-by.component';
 import { BrowseByGuard } from '../browse-by/browse-by-guard';
 import { BrowseByI18nBreadcrumbResolver } from '../browse-by/browse-by-i18n-breadcrumb.resolver';
-import { CollectionRecentlyAddedComponent } from './sections/recently-added/collection-recently-added.component';
+import { ComcolRecentlyAddedComponent } from '../shared/comcol/sections/comcol-recently-added/comcol-recently-added.component';
 
 @NgModule({
   imports: [
@@ -73,7 +73,7 @@ import { CollectionRecentlyAddedComponent } from './sections/recently-added/coll
               {
                 path: '',
                 pathMatch: 'full',
-                component: CollectionRecentlyAddedComponent,
+                component: ComcolRecentlyAddedComponent,
               },
               {
                 path: 'browse/:id',

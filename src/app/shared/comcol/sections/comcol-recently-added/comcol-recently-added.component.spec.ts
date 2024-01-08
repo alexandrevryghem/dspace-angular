@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CollectionRecentlyAddedComponent } from './collection-recently-added.component';
-import { APP_CONFIG } from '../../../../config/app-config.interface';
-import { environment } from '../../../../environments/environment.test';
+import { ComcolRecentlyAddedComponent } from './comcol-recently-added.component';
+import { APP_CONFIG } from '../../../../../config/app-config.interface';
+import { environment } from '../../../../../environments/environment.test';
 import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteStub } from '../../../shared/testing/active-router.stub';
-import { PaginationService } from '../../../core/pagination/pagination.service';
-import { PaginationServiceStub } from '../../../shared/testing/pagination-service.stub';
-import { SearchServiceStub } from '../../../shared/testing/search-service.stub';
-import { SearchService } from '../../../core/shared/search/search.service';
-import { VarDirective } from '../../../shared/utils/var.directive';
+import { ActivatedRouteStub } from '../../../testing/active-router.stub';
+import { PaginationService } from '../../../../core/pagination/pagination.service';
+import { PaginationServiceStub } from '../../../testing/pagination-service.stub';
+import { SearchServiceStub } from '../../../testing/search-service.stub';
+import { SearchService } from '../../../../core/shared/search/search.service';
+import { VarDirective } from '../../../utils/var.directive';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-describe('CollectionRecentlyAddedComponent', () => {
-  let component: CollectionRecentlyAddedComponent;
-  let fixture: ComponentFixture<CollectionRecentlyAddedComponent>;
+describe('ComcolRecentlyAddedComponent', () => {
+  let component: ComcolRecentlyAddedComponent;
+  let fixture: ComponentFixture<ComcolRecentlyAddedComponent>;
 
   let activatedRoute: ActivatedRouteStub;
   let paginationService: PaginationServiceStub;
@@ -27,7 +27,7 @@ describe('CollectionRecentlyAddedComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [
-        CollectionRecentlyAddedComponent,
+        ComcolRecentlyAddedComponent,
         VarDirective,
       ],
       imports: [
@@ -42,7 +42,7 @@ describe('CollectionRecentlyAddedComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CollectionRecentlyAddedComponent);
+    fixture = TestBed.createComponent(ComcolRecentlyAddedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
