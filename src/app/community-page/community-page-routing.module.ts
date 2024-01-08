@@ -19,6 +19,7 @@ import { SubComColSectionComponent } from './sections/sub-com-col-section/sub-co
 import { BrowseByI18nBreadcrumbResolver } from '../browse-by/browse-by-i18n-breadcrumb.resolver';
 import { BrowseByGuard } from '../browse-by/browse-by-guard';
 import { ComcolBrowseByComponent } from '../shared/comcol/sections/comcol-browse-by/comcol-browse-by.component';
+import { ComcolRecentlyAddedComponent } from '../shared/comcol/sections/comcol-recently-added/comcol-recently-added.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,11 @@ import { ComcolBrowseByComponent } from '../shared/comcol/sections/comcol-browse
             children: [
               {
                 path: '',
+                pathMatch: 'full',
+                component: ComcolRecentlyAddedComponent,
+              },
+              {
+                path: 'subcoms-cols',
                 pathMatch: 'full',
                 component: SubComColSectionComponent,
               },
