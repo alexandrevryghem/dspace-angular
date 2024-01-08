@@ -40,6 +40,14 @@ const EDIT_BITSTREAM_AUTHORIZATIONS_PATH = ':id/authorizations';
         },
       },
       {
+        // Resolve JSPUI bitstream download URLs
+        path: 'handle/:prefix/:suffix/:sequence_id/:filename',
+        component: BitstreamDownloadPageComponent,
+        resolve: {
+          bitstream: LegacyBitstreamUrlResolver
+        },
+      },
+      {
         // Resolve angular bitstream download URLs
         path: ':id/download',
         component: BitstreamDownloadPageComponent,
