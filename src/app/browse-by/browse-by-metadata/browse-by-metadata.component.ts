@@ -150,7 +150,11 @@ export class BrowseByMetadataComponent extends AbstractBrowseByTypeComponent imp
             this.value = '';
           }
 
-          if (typeof params.startsWith === 'string'){
+          if (params.startsWith === undefined || params.startsWith === '') {
+            this.startsWith = undefined;
+          }
+
+        if (typeof params.startsWith === 'string'){
             this.startsWith = params.startsWith.trim();
           }
 
