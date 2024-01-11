@@ -1,6 +1,9 @@
 import { FacetValue } from './models/facet-value.model';
 import { SearchFilterConfig } from './models/search-filter-config.model';
-import { isNotEmpty } from '../empty.util';
+import { isNotEmpty, hasValue } from '../empty.util';
+import { FilterType } from './models/filter-type.model';
+
+export const SEARCH_AUTHORITY_VALUE_SEPARATOR = '||';
 
 /**
  * Get a facet's value by matching its parameter in the search href, this will include the operator of the facet value
@@ -17,10 +20,10 @@ export function getFacetValueForType(facetValue: FacetValue, searchFilterConfig:
     }
   }
   if (facetValue.authorityKey) {
-    return addOperatorToFilterValue(facetValue.authorityKey, 'authority');
+    return addOperatorToFilterValue(facetValue.authorityKey, 'authority', facetValue);
   }
 
-  return addOperatorToFilterValue(facetValue.value, 'equals');
+  return addOperatorToFilterValue(facetValue.value, 'equals', facetValue);
 }
 
 /**
@@ -33,23 +36,45 @@ export function escapeRegExp(input: string): string {
 }
 
 /**
- * Strip the operator from a filter value
+ * Strips raw value from a filter value when a display value is present and strips its operator
  * Warning: This expects the value to end with an operator, otherwise it might strip unwanted content
- * @param value
+ *
+ * @param value The filter value to parse
  */
-export function stripOperatorFromFilterValue(value: string) {
+export function getDisplayValueFromFilterValue(value: string): string {
   if (value.lastIndexOf(',') > -1) {
-    return value.substring(0, value.lastIndexOf(','));
+    value = value.substring(0, value.lastIndexOf(','));
+  }
+  if (value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR) > -1) {
+    value = value.substring(0, value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR));
   }
   return value;
 }
 
 /**
- * Add an operator to a string
- * @param value
- * @param operator
+ * Strips the display value from a filter value
+ *
+ * @param value The filter value to parse
  */
-export function addOperatorToFilterValue(value: string, operator: string) {
+export function stripDisplayValueFromFilterValue(value: string): string {
+  if (value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR) > -1) {
+    value = value.substring(value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR) + SEARCH_AUTHORITY_VALUE_SEPARATOR.length);
+  }
+  return value;
+}
+
+/**
+ * Add the operator to the value (when not already present) and the display value when it differs from the actual value
+ *
+ * @param value The value to update
+ * @param operator The operator to add
+ * @param facetValue Additional facet information used by the authority operator
+ */
+export function addOperatorToFilterValue(value: string, operator: string, facetValue?: FacetValue): string {
+  if (hasValue(facetValue) && operator === FilterType.authority) {
+    const displayName: string = isNotEmpty(facetValue.value) ? facetValue.value : facetValue.label;
+    value = (isNotEmpty(displayName) && displayName !== value ? displayName + SEARCH_AUTHORITY_VALUE_SEPARATOR : '') + value;
+  }
   if (!value.endsWith(`,${operator}`)) {
     return `${value},${operator}`;
   }

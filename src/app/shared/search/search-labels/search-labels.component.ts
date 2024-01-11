@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Params, Router } from '@angular/router';
 import { SearchConfigurationService } from '../../../core/shared/search/search-configuration.service';
 import { map } from 'rxjs/operators';
-import { stripOperatorFromFilterValue } from '../search.utils';
+import { getDisplayValueFromFilterValue } from '../search.utils';
 
 @Component({
   selector: 'ds-search-labels',
@@ -37,7 +37,7 @@ export class SearchLabelsComponent {
         const labels = {};
         Object.keys(params)
           .forEach((key) => {
-            labels[key] = [...params[key].map((value) => stripOperatorFromFilterValue(value))];
+            labels[key] = [...params[key].map((value: string) => getDisplayValueFromFilterValue(value))];
           });
         return labels;
       })

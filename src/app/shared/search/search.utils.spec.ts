@@ -3,9 +3,12 @@ import { SearchFilterConfig } from './models/search-filter-config.model';
 import {
   addOperatorToFilterValue,
   escapeRegExp,
+  getDisplayValueFromFilterValue,
   getFacetValueForType,
-  stripOperatorFromFilterValue
+  SEARCH_AUTHORITY_VALUE_SEPARATOR,
+  stripDisplayValueFromFilterValue,
 } from './search.utils';
+import { FilterType } from './models/filter-type.model';
 
 describe('Search Utils', () => {
   describe('getFacetValueForType', () => {
@@ -13,6 +16,7 @@ describe('Search Utils', () => {
     let facetValueWithoutSearchHref: FacetValue;
     let searchFilterConfig: SearchFilterConfig;
     let facetValueWithSearchHrefAuthority: FacetValue;
+    let facetValueWithSearchHrefAuthorityWithoutValue: FacetValue;
 
     beforeEach(() => {
       facetValueWithSearchHref = Object.assign(new FacetValue(), {
@@ -24,10 +28,15 @@ describe('Search Utils', () => {
         }
       });
       facetValueWithSearchHrefAuthority = Object.assign(new FacetValue(), {
+        label: 'Label with search href',
         value: 'Value with search href',
         authorityKey: 'uuid',
-        }
-      );
+      });
+      facetValueWithSearchHrefAuthorityWithoutValue = Object.assign(new FacetValue(), {
+        label: 'Label with search href',
+        value: '',
+        authorityKey: 'uuid',
+      });
       facetValueWithoutSearchHref = Object.assign(new FacetValue(), {
         value: 'Value without search href'
       });
@@ -40,8 +49,12 @@ describe('Search Utils', () => {
       expect(getFacetValueForType(facetValueWithSearchHref, searchFilterConfig)).toEqual('Value with search href,operator');
     });
 
-    it('should retrieve the correct value from the Facet', () => {
-      expect(getFacetValueForType(facetValueWithSearchHrefAuthority, searchFilterConfig)).toEqual('uuid,authority');
+    it('should retrieve the value from the Facet when it is defined', () => {
+      expect(getFacetValueForType(facetValueWithSearchHrefAuthority, searchFilterConfig)).toEqual('Value with search href||uuid,authority');
+    });
+
+    it('should retrieve the label from the Facet when no value is defined', () => {
+      expect(getFacetValueForType(facetValueWithSearchHrefAuthorityWithoutValue, searchFilterConfig)).toEqual('Label with search href||uuid,authority');
     });
 
     it('should return the facet value with an equals operator by default', () => {
@@ -49,9 +62,19 @@ describe('Search Utils', () => {
     });
   });
 
-  describe('stripOperatorFromFilterValue', () => {
+  describe('getDisplayValueFromFilterValue', () => {
     it('should strip the operator from the value', () => {
-      expect(stripOperatorFromFilterValue('value,operator')).toEqual('value');
+      expect(getDisplayValueFromFilterValue('value,operator')).toBe('value');
+    });
+
+    it('should strip the display value from the value', () => {
+      expect(getDisplayValueFromFilterValue(`display${SEARCH_AUTHORITY_VALUE_SEPARATOR}raw`)).toBe('display');
+    });
+  });
+
+  describe('stripDisplayValueFromFilterValue', () => {
+    it('should remove the display value from the value', () => {
+      expect(stripDisplayValueFromFilterValue(`display${SEARCH_AUTHORITY_VALUE_SEPARATOR}raw,authority`)).toBe('raw,authority');
     });
   });
 
@@ -62,6 +85,23 @@ describe('Search Utils', () => {
 
     it('shouldn\'t add the operator to the value if it already contains the operator', () => {
       expect(addOperatorToFilterValue('value,operator', 'operator')).toEqual('value,operator');
+    });
+
+    it('should add the display value to the value for authority facets', () => {
+      const facetValue: FacetValue = Object.assign(new FacetValue(), {
+        label: 'display value',
+        value: 'display value',
+        authorityKey: '977e3a5b83a89f0ea6ae8671ae097f6b28bbf403'
+      });
+      expect(addOperatorToFilterValue('977e3a5b83a89f0ea6ae8671ae097f6b28bbf403', FilterType.authority, facetValue)).toEqual(`display value${SEARCH_AUTHORITY_VALUE_SEPARATOR}977e3a5b83a89f0ea6ae8671ae097f6b28bbf403,${FilterType.authority}`);
+    });
+
+    it('should not add the display value to the value if empty for authority facets', () => {
+      const facetValue: FacetValue = Object.assign(new FacetValue(), {
+        label: '',
+        value: '977e3a5b83a89f0ea6ae8671ae097f6b28bbf403',
+      });
+      expect(addOperatorToFilterValue('977e3a5b83a89f0ea6ae8671ae097f6b28bbf403', FilterType.authority, facetValue)).toEqual(`977e3a5b83a89f0ea6ae8671ae097f6b28bbf403,${FilterType.authority}`);
     });
   });
 
