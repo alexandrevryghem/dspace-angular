@@ -9,6 +9,8 @@ import { ViewMode } from '../../core/shared/view-mode.model';
 import { SearchObjects } from './models/search-objects.model';
 import { DSpaceObject } from '../../core/shared/dspace-object.model';
 import { ListableObject } from '../object-collection/shared/listable-object.model';
+import { SEARCH_CONFIG_SERVICE } from '../../my-dspace-page/my-dspace-page.component';
+import { SearchConfigurationService } from '../../core/shared/search/search-configuration.service';
 
 /**
  * Themed wrapper for {@link SearchComponent}
@@ -17,6 +19,12 @@ import { ListableObject } from '../object-collection/shared/listable-object.mode
   selector: 'ds-themed-search',
   styleUrls: [],
   templateUrl: '../theme-support/themed.component.html',
+  providers: [
+    {
+      provide: SEARCH_CONFIG_SERVICE,
+      useClass: SearchConfigurationService
+    }
+  ]
 })
 export class ThemedSearchComponent extends ThemedComponent<SearchComponent> {
   protected inAndOutputNames: (keyof SearchComponent & keyof this)[] = ['configurationList', 'context', 'configuration', 'fixedFilterQuery', 'useCachedVersionIfAvailable', 'inPlaceSearch', 'linkType', 'paginationId', 'searchEnabled', 'sideBarWidth', 'searchFormPlaceholder', 'selectable', 'selectionConfig', 'showCsvExport', 'showSidebar', 'showThumbnails', 'showViewModes', 'useUniquePageId', 'viewModeList', 'showScopeSelector', 'resultFound', 'deselectObject', 'selectObject', 'trackStatistics', 'query'];
