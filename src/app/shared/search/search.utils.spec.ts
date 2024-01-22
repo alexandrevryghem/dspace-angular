@@ -1,10 +1,13 @@
 import { FacetValue } from './models/facet-value.model';
 import { SearchFilterConfig } from './models/search-filter-config.model';
 import {
+  addDisplayValueToFilterValue,
   addOperatorToFilterValue,
   escapeRegExp,
+  getDisplayValueFromFilterValue,
   getFacetValueForType,
-  stripOperatorFromFilterValue
+  SEARCH_AUTHORITY_VALUE_SEPARATOR,
+  stripDisplayValueFromFilterValue,
 } from './search.utils';
 
 describe('Search Utils', () => {
@@ -24,10 +27,10 @@ describe('Search Utils', () => {
         }
       });
       facetValueWithSearchHrefAuthority = Object.assign(new FacetValue(), {
+        label: 'Value with search href',
         value: 'Value with search href',
         authorityKey: 'uuid',
-        }
-      );
+      });
       facetValueWithoutSearchHref = Object.assign(new FacetValue(), {
         value: 'Value without search href'
       });
@@ -40,8 +43,8 @@ describe('Search Utils', () => {
       expect(getFacetValueForType(facetValueWithSearchHref, searchFilterConfig)).toEqual('Value with search href,equals');
     });
 
-    it('should retrieve the correct value from the Facet', () => {
-      expect(getFacetValueForType(facetValueWithSearchHrefAuthority, searchFilterConfig)).toEqual('uuid,authority');
+    it('should retrieve the value from the Facet when it is defined', () => {
+      expect(getFacetValueForType(facetValueWithSearchHrefAuthority, searchFilterConfig)).toEqual('Value with search href||uuid,authority');
     });
 
     it('should return the facet value with an equals operator by default', () => {
@@ -49,18 +52,31 @@ describe('Search Utils', () => {
     });
   });
 
-  describe('stripOperatorFromFilterValue', () => {
+  describe('getDisplayValueFromFilterValue', () => {
     it('should strip equals operator from the value', () => {
-      expect(stripOperatorFromFilterValue('value,equals')).toEqual('value');
+      expect(getDisplayValueFromFilterValue('value,equals')).toEqual('value');
     });
+
     it('should strip query operator from the value', () => {
-      expect(stripOperatorFromFilterValue('value,query')).toEqual('value');
+      expect(getDisplayValueFromFilterValue('value,query')).toEqual('value');
     });
+
     it('should strip authority operator from the value', () => {
-      expect(stripOperatorFromFilterValue('value,authority')).toEqual('value');
+      expect(getDisplayValueFromFilterValue('value,authority')).toEqual('value');
     });
+
     it('should not strip a the part after the last , from a value if it isn\'t a valid operator', () => {
-      expect(stripOperatorFromFilterValue('value,invalid_operator')).toEqual('value,invalid_operator');
+      expect(getDisplayValueFromFilterValue('value,invalid_operator')).toEqual('value,invalid_operator');
+    });
+
+    it('should strip the display value from the value', () => {
+      expect(getDisplayValueFromFilterValue(`display${SEARCH_AUTHORITY_VALUE_SEPARATOR}raw`)).toBe('display');
+    });
+  });
+
+  describe('stripDisplayValueFromFilterValue', () => {
+    it('should remove the display value from the value', () => {
+      expect(stripDisplayValueFromFilterValue(`display${SEARCH_AUTHORITY_VALUE_SEPARATOR}raw,authority`)).toBe('raw,authority');
     });
   });
 
@@ -71,6 +87,16 @@ describe('Search Utils', () => {
 
     it('shouldn\'t add the operator to the value if it already contains the operator', () => {
       expect(addOperatorToFilterValue('value,equals', 'equals')).toEqual('value,equals');
+    });
+  });
+
+  describe('addDisplayValueToFilterValue', () => {
+    it('should add the display value to the value', () => {
+      expect(addDisplayValueToFilterValue('977e3a5b83a89f0ea6ae8671ae097f6b28bbf403', 'display value')).toEqual(`display value${SEARCH_AUTHORITY_VALUE_SEPARATOR}977e3a5b83a89f0ea6ae8671ae097f6b28bbf403`);
+    });
+
+    it('should not add the display value to the value if empty', () => {
+      expect(addDisplayValueToFilterValue('977e3a5b83a89f0ea6ae8671ae097f6b28bbf403', '')).toEqual('977e3a5b83a89f0ea6ae8671ae097f6b28bbf403');
     });
   });
 

@@ -7,7 +7,7 @@ import { SearchService } from '../../../../core/shared/search/search.service';
 import { currentPath } from '../../../utils/route.utils';
 import { PaginationService } from '../../../../core/pagination/pagination.service';
 import { SearchConfigurationService } from '../../../../core/shared/search/search-configuration.service';
-import { stripOperatorFromFilterValue } from '../../search.utils';
+import { getDisplayValueFromFilterValue } from '../../search.utils';
 
 @Component({
   selector: 'ds-search-label',
@@ -85,7 +85,7 @@ export class SearchLabelComponent implements OnInit {
     // const pattern = /,[^,]*$/g;
     const pattern = /,authority*$/g;
     value = value.replace(pattern, '');
-    return stripOperatorFromFilterValue(value);
+    return getDisplayValueFromFilterValue(value);
   }
 
   private getFilterName(): string {
