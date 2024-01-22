@@ -3,6 +3,7 @@ import { URLCombiner } from '../../../core/url-combiner/url-combiner';
 import { SearchFilter } from './search-filter.model';
 import { DSpaceObjectType } from '../../../core/shared/dspace-object-type.model';
 import { ViewMode } from '../../../core/shared/view-mode.model';
+import { stripDisplayValueFromFilterValue } from '../search.utils';
 
 /**
  * This model class represents all parameters needed to request information about a certain search request
@@ -58,7 +59,7 @@ export class SearchOptions {
       this.filters.forEach((filter: SearchFilter) => {
         filter.values.forEach((value) => {
           const filterValue = value.includes(',') ? `${value}` : value + (filter.operator ? ',' + filter.operator : '');
-          args.push(`${filter.key}=${this.encodeFilterQueryValue(filterValue)}`);
+          args.push(`${filter.key}=${this.encodeFilterQueryValue(stripDisplayValueFromFilterValue(filterValue))}`);
         });
       });
     }

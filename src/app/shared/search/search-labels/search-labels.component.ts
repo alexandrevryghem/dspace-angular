@@ -36,7 +36,7 @@ export class SearchLabelsComponent {
         const labels = {};
         Object.keys(params)
           .forEach((key) => {
-            labels[key] = [...params[key].map((value) => value)];
+            labels[key] = [...params[key].map((value: string) => value)];
           });
         return labels;
       })
