@@ -1,7 +1,6 @@
 import { FacetValue } from './models/facet-value.model';
 import { SearchFilterConfig } from './models/search-filter-config.model';
-import { isNotEmpty, hasValue } from '../empty.util';
-import { FilterType } from './models/filter-type.model';
+import { isNotEmpty } from '../empty.util';
 
 export const SEARCH_AUTHORITY_VALUE_SEPARATOR = '||';
 
@@ -19,11 +18,14 @@ export function getFacetValueForType(facetValue: FacetValue, searchFilterConfig:
       return values[1];
     }
   }
+  let operator = 'equals';
+  let value = facetValue.value;
   if (facetValue.authorityKey) {
-    return addOperatorToFilterValue(facetValue.authorityKey, 'authority', facetValue);
+    operator = 'authority';
+    value = addDisplayValueToFilterValue(facetValue.authorityKey, facetValue.label);
   }
 
-  return addOperatorToFilterValue(facetValue.value, 'equals', facetValue);
+  return addOperatorToFilterValue(value, operator);
 }
 
 /**
@@ -64,19 +66,27 @@ export function stripDisplayValueFromFilterValue(value: string): string {
 }
 
 /**
- * Add the operator to the value (when not already present) and the display value when it differs from the actual value
+ * Add the operator to the value (when not already present)
  *
  * @param value The value to update
  * @param operator The operator to add
- * @param facetValue Additional facet information used by the authority operator
  */
-export function addOperatorToFilterValue(value: string, operator: string, facetValue?: FacetValue): string {
-  if (hasValue(facetValue) && operator === FilterType.authority) {
-    const displayName: string = isNotEmpty(facetValue.value) ? facetValue.value : facetValue.label;
-    value = (isNotEmpty(displayName) && displayName !== value ? displayName + SEARCH_AUTHORITY_VALUE_SEPARATOR : '') + value;
-  }
+export function addOperatorToFilterValue(value: string, operator: string): string {
   if (!value.endsWith(`,${operator}`)) {
     return `${value},${operator}`;
+  }
+  return value;
+}
+
+/**
+ * Adds the display value when it differs from the actual value
+ *
+ * @param value The value to update
+ * @param displayValue The fallback display value to add
+ */
+export function addDisplayValueToFilterValue(value: string, displayValue: string): string {
+  if (isNotEmpty(displayValue) && displayValue !== value) {
+    return displayValue + SEARCH_AUTHORITY_VALUE_SEPARATOR + value;
   }
   return value;
 }
