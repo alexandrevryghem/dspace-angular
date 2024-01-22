@@ -32,7 +32,7 @@ import { InputSuggestion } from '../../../../input-suggestions/input-suggestions
 import { SearchOptions } from '../../../models/search-options.model';
 import { SEARCH_CONFIG_SERVICE } from '../../../../../my-dspace-page/my-dspace-page.component';
 import { currentPath } from '../../../../utils/route.utils';
-import { getFacetValueForType, stripOperatorFromFilterValue } from '../../../search.utils';
+import { getFacetValueForType, getDisplayValueFromFilterValue } from '../../../search.utils';
 import { createPendingRemoteDataObject } from '../../../../remote-data.utils';
 import { FacetValues } from '../../../models/facet-values.model';
 
@@ -236,7 +236,7 @@ export class SearchFacetFilterComponent implements OnInit, OnDestroy {
                     return {
                       displayValue: this.getDisplayValue(facet, data),
                       query: this.getFacetValue(facet),
-                      value: stripOperatorFromFilterValue(this.getFacetValue(facet))
+                      value: getDisplayValueFromFilterValue(this.getFacetValue(facet)),
                     };
                   });
                 }
@@ -328,7 +328,7 @@ export class SearchFacetFilterComponent implements OnInit, OnDestroy {
               if (hasValue(fValue)) {
                 return fValue;
               }
-              const filterValue = stripOperatorFromFilterValue(value);
+              const filterValue = getDisplayValueFromFilterValue(value);
               return Object.assign(new FacetValue(), { label: filterValue, value: filterValue });
             });
           })

@@ -2,6 +2,8 @@ import { FacetValue } from './models/facet-value.model';
 import { SearchFilterConfig } from './models/search-filter-config.model';
 import { isNotEmpty } from '../empty.util';
 
+export const SEARCH_AUTHORITY_VALUE_SEPARATOR = '||';
+
 /**
  * Get a facet's value by matching its parameter in the search href, this will include the operator of the facet value
  * If the {@link FacetValue} doesn't contain a search link, its raw value will be returned as a fallback
@@ -16,11 +18,14 @@ export function getFacetValueForType(facetValue: FacetValue, searchFilterConfig:
       return decodeURIComponent(values[1]);
     }
   }
+  let operator = 'equals';
+  let value = facetValue.value;
   if (facetValue.authorityKey) {
-    return addOperatorToFilterValue(facetValue.authorityKey, 'authority');
+    operator = 'authority';
+    value = addDisplayValueToFilterValue(facetValue.authorityKey, facetValue.label);
   }
 
-  return addOperatorToFilterValue(facetValue.value, 'equals');
+  return addOperatorToFilterValue(value, operator);
 }
 
 /**
@@ -33,24 +38,54 @@ export function escapeRegExp(input: string): string {
 }
 
 /**
- * Strip the operator (equals, query or authority) from a filter value.
- * @param value The value from which the operator should be stripped.
+ * Strip the operator (equals, query or authority) from a filter value, and it strips the raw value from a filter value
+ *
+ * @param value The filter value to parse
  */
-export function stripOperatorFromFilterValue(value: string) {
+export function getDisplayValueFromFilterValue(value: string): string {
   if (value.match(new RegExp(`.+,(equals|query|authority)$`))) {
-    return value.substring(0, value.lastIndexOf(','));
+    value = value.substring(0, value.lastIndexOf(','));
+  }
+  if (value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR) > -1) {
+    value = value.substring(0, value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR));
   }
   return value;
 }
 
 /**
- * Add an operator to a string
- * @param value
- * @param operator
+ * Strips the display value from a filter value
+ *
+ * @param value The filter value to parse
  */
-export function addOperatorToFilterValue(value: string, operator: string) {
+export function stripDisplayValueFromFilterValue(value: string): string {
+  if (value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR) > -1) {
+    value = value.substring(value.indexOf(SEARCH_AUTHORITY_VALUE_SEPARATOR) + SEARCH_AUTHORITY_VALUE_SEPARATOR.length);
+  }
+  return value;
+}
+
+/**
+ * Add the operator to the value (when not already present)
+ *
+ * @param value The value to update
+ * @param operator The operator to add
+ */
+export function addOperatorToFilterValue(value: string, operator: string): string {
   if (!value.match(new RegExp(`^.+,(equals|query|authority)$`))) {
     return `${value},${operator}`;
+  }
+  return value;
+}
+
+/**
+ * Adds the display value when it differs from the actual value
+ *
+ * @param value The value to update
+ * @param displayValue The fallback display value to add
+ */
+export function addDisplayValueToFilterValue(value: string, displayValue: string): string {
+  if (isNotEmpty(displayValue) && displayValue !== value) {
+    return displayValue + SEARCH_AUTHORITY_VALUE_SEPARATOR + value;
   }
   return value;
 }
