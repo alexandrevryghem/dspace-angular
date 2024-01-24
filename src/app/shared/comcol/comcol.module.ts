@@ -19,6 +19,7 @@ import { UploadModule } from '../upload/upload.module';
 import { ComcolBrowseByComponent } from './sections/comcol-browse-by/comcol-browse-by.component';
 import { BrowseByModule } from '../../browse-by/browse-by.module';
 import { ComcolRecentlyAddedComponent } from './sections/comcol-recently-added/comcol-recently-added.component';
+import { SearchModule } from '../search/search.module';
 
 const COMPONENTS = [
   ComcolPageContentComponent,
@@ -47,6 +48,7 @@ const COMPONENTS = [
     SharedModule,
     UploadModule,
     BrowseByModule,
+    SearchModule,
   ],
   exports: [
     ...COMPONENTS,
