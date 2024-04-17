@@ -40,5 +40,7 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
     super.ngOnInit();
     this.showThumbnails = this.showThumbnails ?? this.appConfig.browseBy.showThumbnails;
     this.itemPageRoute = getItemPageRoute(this.dso);
+    console.log('Object should have an observable on thumbnailBitstream property:', this.object.indexableObject.thumbnailBitstream);
+    console.log('Object should NOT have a value for thumbnail property:', (this.object.indexableObject as any).thumbnail);
   }
 }

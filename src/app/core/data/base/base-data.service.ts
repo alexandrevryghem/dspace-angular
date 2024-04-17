@@ -302,6 +302,9 @@ export class BaseDataService<T extends CacheableObject> implements HALDataServic
         if (hasValue(remoteDataObject?.payload?._links)) {
           for (const followLinkName of Object.keys(remoteDataObject.payload._links)) {
             // only add the followLinks if they are embedded
+            if (followLinkName === 'thumbnail') {
+              console.log(followLinkName, remoteDataObject.payload);
+            }
             if (hasValue(remoteDataObject.payload[followLinkName]) && followLinkName !== 'self') {
               // followLink can be either an individual HALLink or a HALLink[]
               const followLinksList: HALLink[] = [].concat(remoteDataObject.payload._links[followLinkName]);

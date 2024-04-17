@@ -7,7 +7,7 @@
 <div class="row">
   <div class="col-xs-12 col-md-4">
     <ds-metadata-field-wrapper [hideIfNoTextContent]="false">
-      <ds-themed-thumbnail [thumbnail]="object?.thumbnail | async"
+      <ds-themed-thumbnail [thumbnail]="object?.thumbnailBitstream | async"
                     [defaultImage]="'assets/images/orgunit-placeholder.svg'"
                     [alt]="'thumbnail.orgunit.alt'"
                     [placeholder]="'thumbnail.orgunit.placeholder'"

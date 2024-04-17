@@ -124,7 +124,7 @@ export class Item extends DSpaceObject implements ChildHALResource, HandleObject
    * Will be undefined unless the thumbnail {@link HALLink} has been resolved.
    */
   @link(BITSTREAM, false, 'thumbnail')
-    thumbnail?: Observable<RemoteData<Bitstream>>;
+    thumbnailBitstream?: Observable<RemoteData<Bitstream>>;
 
   /**
    * The access status for this Item
