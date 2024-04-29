@@ -41,6 +41,7 @@ import { FieldUpdates } from '../../../../core/data/object-updates/field-updates
 import { FieldChangeType } from '../../../../core/data/object-updates/field-change-type.model';
 import { APP_CONFIG, AppConfig } from '../../../../../config/app-config.interface';
 import { itemLinksToFollow } from '../../../../shared/utils/relation-query.utils';
+import { Identifiable } from '../../../../core/data/object-updates/identifiable.model';
 
 @Component({
   selector: 'ds-edit-relationship-list',
@@ -79,7 +80,7 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
   /**
    * The event emmiter to submit the new information
    */
-  @Output() submit: EventEmitter<any> = new EventEmitter();
+  @Output() submitModal: EventEmitter<void> = new EventEmitter();
 
   /**
    * Observable that emits the left and right item type of {@link relationshipType} simultaneously.
@@ -281,21 +282,23 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
 
 
     modalComp.submitEv = () => {
-      const subscriptions: Observable<RelationshipIdentifiable>[] = [];
+      const subscriptions: Observable<Identifiable[]>[] = [];
 
       modalComp.toAdd.forEach((searchResult: ItemSearchResult) => {
         const relatedItem = searchResult.indexableObject;
         subscriptions.push(this.relationshipService.getNameVariant(this.listId, relatedItem.uuid).pipe(
-          map((nameVariant) => {
-          const update = {
-            uuid: this.relationshipType.id + '-' + searchResult.indexableObject.uuid,
-            nameVariant,
-            type: this.relationshipType,
-            relatedItem,
-          } as RelationshipIdentifiable;
-          this.objectUpdatesService.saveAddFieldUpdate(this.url, update);
-          return update;
-        })
+          switchMap((nameVariant: string) => {
+            const update = {
+              uuid: this.relationshipType.id + '-' + searchResult.indexableObject.uuid,
+              nameVariant,
+              type: this.relationshipType,
+              relatedItem,
+            } as RelationshipIdentifiable;
+            this.objectUpdatesService.saveAddFieldUpdate(this.url, update);
+            return this.objectUpdatesService.getUpdatedFields(this.url, [update]).pipe(
+              take(1),
+            );
+          })
         ));
       });
 
@@ -303,7 +306,7 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
         subscriptions.push(this.relationshipService.getNameVariant(this.listId, searchResult.indexableObject.uuid).pipe(
           switchMap((nameVariant) => {
             return this.getRelationFromId(searchResult.indexableObject).pipe(
-              map( (relationship: Relationship) => {
+              switchMap((relationship: Relationship) => {
                 const update = {
                   uuid: relationship.id,
                   nameVariant,
@@ -311,19 +314,17 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
                   relationship,
                 } as RelationshipIdentifiable;
                 this.objectUpdatesService.saveRemoveFieldUpdate(this.url,update);
-                return update;
+                return this.objectUpdatesService.getUpdatedFields(this.url, [update]).pipe(
+                  take(1),
+                );
               })
             );
           })
         ));
       });
 
-      observableCombineLatest(subscriptions).subscribe( (res) => {
-        // Wait until the states changes since there are multiple items
-        setTimeout( () => {
-          this.submit.emit();
-        },1000);
-
+      observableCombineLatest(subscriptions).subscribe(() => {
+        this.submitModal.emit();
         modalComp.isPending = true;
       });
     };
