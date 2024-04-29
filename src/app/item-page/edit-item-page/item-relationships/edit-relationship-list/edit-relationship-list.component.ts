@@ -28,7 +28,7 @@ import { ItemType } from '../../../../core/shared/item-relationships/item-type.m
 import { DsDynamicLookupRelationModalComponent } from '../../../../shared/form/builder/ds-dynamic-form-ui/relation-lookup-modal/dynamic-lookup-relation-modal.component';
 import { RelationshipOptions } from '../../../../shared/form/builder/models/relationship-options.model';
 import { SelectableListService } from '../../../../shared/object-list/selectable-list/selectable-list.service';
-import { SearchResult } from '../../../../shared/search/models/search-result.model';
+import { ItemSearchResult } from '../../../../shared/object-collection/shared/item-search-result.model';
 import { FollowLinkConfig } from '../../../../shared/utils/follow-link-config.model';
 import { PaginatedList } from '../../../../core/data/paginated-list.model';
 import { RemoteData } from '../../../../core/data/remote-data';
@@ -236,11 +236,11 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
       modalComp.collection = collection;
     });
 
-    modalComp.select = (...selectableObjects: SearchResult<Item>[]) => {
+    modalComp.select = (...selectableObjects: ItemSearchResult[]) => {
       selectableObjects.forEach((searchResult) => {
         const relatedItem: Item = searchResult.indexableObject;
 
-        const foundIndex = modalComp.toRemove.findIndex( el => el.uuid === relatedItem.uuid);
+        const foundIndex = modalComp.toRemove.findIndex((itemSearchResult: ItemSearchResult) => itemSearchResult.indexableObject.uuid === relatedItem.uuid);
 
         if (foundIndex !== -1) {
           modalComp.toRemove.splice(foundIndex,1);
@@ -264,7 +264,7 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
         }
       });
     };
-    modalComp.deselect = (...selectableObjects: SearchResult<Item>[]) => {
+    modalComp.deselect = (...selectableObjects: ItemSearchResult[]) => {
       selectableObjects.forEach((searchResult) => {
         const relatedItem: Item = searchResult.indexableObject;
 
@@ -281,10 +281,9 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
 
 
     modalComp.submitEv = () => {
+      const subscriptions: Observable<RelationshipIdentifiable>[] = [];
 
-      const subscriptions = [];
-
-      modalComp.toAdd.forEach((searchResult: SearchResult<Item>) => {
+      modalComp.toAdd.forEach((searchResult: ItemSearchResult) => {
         const relatedItem = searchResult.indexableObject;
         subscriptions.push(this.relationshipService.getNameVariant(this.listId, relatedItem.uuid).pipe(
           map((nameVariant) => {
@@ -301,7 +300,7 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
       });
 
       modalComp.toRemove.forEach( (searchResult) => {
-        subscriptions.push(this.relationshipService.getNameVariant(this.listId, searchResult.indexableObjectuuid).pipe(
+        subscriptions.push(this.relationshipService.getNameVariant(this.listId, searchResult.indexableObject.uuid).pipe(
           switchMap((nameVariant) => {
             return this.getRelationFromId(searchResult.indexableObject).pipe(
               map( (relationship: Relationship) => {
@@ -358,11 +357,11 @@ export class EditRelationshipListComponent implements OnInit, OnDestroy {
     this.selectableListService.deselectAll(this.listId);
   }
 
-  getRelationFromId(relatedItem) {
+  getRelationFromId(relatedItem: Item): Observable<Relationship> {
     return this.currentItemIsLeftItem$.pipe(
       take(1),
-      switchMap( isLeft => {
-        let apiCall;
+      switchMap((isLeft: boolean) => {
+        let apiCall: Observable<PaginatedList<Relationship>>;
         if (isLeft) {
           apiCall = this.relationshipService.searchByItemsAndType( this.relationshipType.id, this.item.uuid, this.relationshipType.leftwardType ,[relatedItem.id] ).pipe(
                       getFirstSucceededRemoteData(),
