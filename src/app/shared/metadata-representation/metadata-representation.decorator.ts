@@ -3,8 +3,8 @@ import { hasNoValue, hasValue } from '../empty.util';
 import { Context } from '../../core/shared/context.model';
 import { InjectionToken } from '@angular/core';
 import { GenericConstructor } from '../../core/shared/generic-constructor';
-import { DEFAULT_THEME, DEFAULT_CONTEXT } from '../object-collection/shared/listable-object/listable-object.decorator';
-import { getMatch } from '../abstract-component-loader/dynamic-component-loader.utils';
+import { DEFAULT_CONTEXT } from '../object-collection/shared/listable-object/listable-object.decorator';
+import { getMatch, DEFAULT_THEME } from '../abstract-component-loader/dynamic-component-loader.utils';
 
 export const METADATA_REPRESENTATION_COMPONENT_FACTORY = new InjectionToken<(entityType: string, mdRepresentationType: MetadataRepresentationType, context: Context, theme: string) => GenericConstructor<any>>('getMetadataRepresentationComponent', {
   providedIn: 'root',

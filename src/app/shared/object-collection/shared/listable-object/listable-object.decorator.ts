@@ -6,6 +6,7 @@ import { ListableObject } from '../listable-object.model';
 import { ThemeConfig } from '../../../../../config/theme.model';
 import { InjectionToken } from '@angular/core';
 import {
+  DEFAULT_THEME,
   getMatch,
   getThemeConfigFor,
   MatchRelevancy,
@@ -13,7 +14,6 @@ import {
 
 export const DEFAULT_VIEW_MODE = ViewMode.ListElement;
 export const DEFAULT_CONTEXT = Context.Any;
-export const DEFAULT_THEME = '*';
 
 /**
  * Factory to allow us to inject getThemeConfigFor so we can mock it in tests

@@ -1,4 +1,4 @@
-import { DEFAULT_THEME } from '../object-collection/shared/listable-object/listable-object.decorator';
+import { DEFAULT_THEME } from '../abstract-component-loader/dynamic-component-loader.utils';
 import { MenuID } from './menu-id.model';
 import { hasValue } from '../empty.util';
 

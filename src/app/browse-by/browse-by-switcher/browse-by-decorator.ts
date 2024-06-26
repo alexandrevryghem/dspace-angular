@@ -3,8 +3,8 @@ import { InjectionToken } from '@angular/core';
 import { GenericConstructor } from '../../core/shared/generic-constructor';
 import {
   DEFAULT_THEME,
-  resolveTheme
-} from '../../shared/object-collection/shared/listable-object/listable-object.decorator';
+  resolveTheme,
+} from '../../shared/abstract-component-loader/dynamic-component-loader.utils';
 
 export enum BrowseByDataType {
   Title = 'title',

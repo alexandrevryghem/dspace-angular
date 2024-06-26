@@ -1,7 +1,6 @@
 import { AuthMethodType } from '../../../core/auth/models/auth.method-type';
-import { DEFAULT_THEME } from '../../object-collection/shared/listable-object/listable-object.decorator';
+import { getMatch, DEFAULT_THEME } from '../../abstract-component-loader/dynamic-component-loader.utils';
 import { hasNoValue } from '../../empty.util';
-import { getMatch } from '../../abstract-component-loader/dynamic-component-loader.utils';
 
 export const DEFAULT_AUTH_METHOD_TYPE = AuthMethodType.Password;
 

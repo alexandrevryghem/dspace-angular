@@ -1,7 +1,8 @@
 import { hasNoValue, hasValue, isNotEmpty } from '../empty.util';
-import { DEFAULT_THEME } from '../object-collection/shared/listable-object/listable-object.decorator';
 import { ThemeConfig } from '../../../config/theme.model';
 import { environment } from '../../../environments/environment';
+
+export const DEFAULT_THEME = '*';
 
 /**
  * A class used to compare two matches and their relevancy to determine which of the two gains priority over the other
