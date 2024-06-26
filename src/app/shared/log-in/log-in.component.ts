@@ -29,6 +29,7 @@ import {
 import { CoreState } from '../../core/core-state.model';
 import { hasValue } from '../empty.util';
 import { ThemedLoadingComponent } from '../loading/themed-loading.component';
+import { ThemeService } from '../theme-support/theme.service';
 import { LogInContainerComponent } from './container/log-in-container.component';
 import { rendersAuthMethodType } from './methods/log-in.methods-decorator';
 
@@ -66,8 +67,10 @@ export class LogInComponent implements OnInit {
    */
   public loading: Observable<boolean>;
 
-  constructor(private store: Store<CoreState>,
-              private authService: AuthService,
+  constructor(
+    protected store: Store<CoreState>,
+    protected authService: AuthService,
+    protected themeService: ThemeService,
   ) {
   }
 
@@ -75,7 +78,7 @@ export class LogInComponent implements OnInit {
     this.authMethods = this.store.pipe(
       select(getAuthenticationMethods),
       map((methods: AuthMethod[]) => methods
-        .filter((authMethod: AuthMethod) => rendersAuthMethodType(authMethod.authMethodType) !== undefined)
+        .filter((authMethod: AuthMethod) => rendersAuthMethodType(authMethod.authMethodType, this.themeService.getThemeName()) !== undefined)
         .sort((method1: AuthMethod, method2: AuthMethod) => method1.position - method2.position),
       ),
     );

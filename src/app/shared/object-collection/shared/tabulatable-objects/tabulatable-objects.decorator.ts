@@ -4,6 +4,11 @@ import { Context } from '../../../../core/shared/context.model';
 import { GenericConstructor } from '../../../../core/shared/generic-constructor';
 import { ViewMode } from '../../../../core/shared/view-mode.model';
 import {
+  DEFAULT_THEME,
+  getMatch,
+  MatchRelevancy,
+} from '../../../abstract-component-loader/dynamic-component-loader.utils';
+import {
   hasNoValue,
   hasValue,
 } from '../../../empty.util';
@@ -11,10 +16,7 @@ import { TabulatableResultListElementsComponent } from '../../../object-list/sea
 import { ListableObject } from '../listable-object.model';
 import {
   DEFAULT_CONTEXT,
-  DEFAULT_THEME,
   DEFAULT_VIEW_MODE,
-  getMatch,
-  MatchRelevancy,
 } from '../listable-object/listable-object.decorator';
 
 type TabulatableComponentType = typeof TabulatableResultListElementsComponent;

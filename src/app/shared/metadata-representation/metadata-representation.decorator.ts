@@ -7,14 +7,14 @@ import { OrgUnitItemMetadataListElementComponent } from '../../entity-groups/res
 import { PersonItemMetadataListElementComponent } from '../../entity-groups/research-entities/metadata-representations/person/person-item-metadata-list-element.component';
 import { ProjectItemMetadataListElementComponent } from '../../entity-groups/research-entities/metadata-representations/project/project-item-metadata-list-element.component';
 import {
+  DEFAULT_THEME,
+  getMatch,
+} from '../abstract-component-loader/dynamic-component-loader.utils';
+import {
   hasNoValue,
   hasValue,
 } from '../empty.util';
-import {
-  DEFAULT_CONTEXT,
-  DEFAULT_THEME,
-  resolveTheme,
-} from '../object-collection/shared/listable-object/listable-object.decorator';
+import { DEFAULT_CONTEXT } from '../object-collection/shared/listable-object/listable-object.decorator';
 import { BrowseLinkMetadataListElementComponent } from '../object-list/metadata-representation-list-element/browse-link/browse-link-metadata-list-element.component';
 import { ItemMetadataListElementComponent } from '../object-list/metadata-representation-list-element/item/item-metadata-list-element.component';
 import { PlainTextMetadataListElementComponent } from '../object-list/metadata-representation-list-element/plain-text/plain-text-metadata-list-element.component';
@@ -97,30 +97,5 @@ export function metadataRepresentationComponent(entityType: string, mdRepresenta
  * @param theme the theme to match
  */
 export function getMetadataRepresentationComponent(entityType: string, mdRepresentationType: MetadataRepresentationType, context: Context = DEFAULT_CONTEXT, theme = DEFAULT_THEME) {
-  const mapForEntity = METADATA_REPRESENTATION_COMPONENT_DECORATOR_MAP.get(entityType);
-  if (hasValue(mapForEntity)) {
-    const entityAndMDRepMap = mapForEntity.get(mdRepresentationType);
-    if (hasValue(entityAndMDRepMap)) {
-      const contextMap = entityAndMDRepMap.get(context);
-      if (hasValue(contextMap)) {
-        const match = resolveTheme(contextMap, theme);
-        if (hasValue(match)) {
-          return match;
-        }
-        if (hasValue(contextMap.get(DEFAULT_THEME))) {
-          return contextMap.get(DEFAULT_THEME);
-        }
-      }
-      if (hasValue(entityAndMDRepMap.get(DEFAULT_CONTEXT)) &&
-        hasValue(entityAndMDRepMap.get(DEFAULT_CONTEXT).get(DEFAULT_THEME))) {
-        return entityAndMDRepMap.get(DEFAULT_CONTEXT).get(DEFAULT_THEME);
-      }
-    }
-    if (hasValue(mapForEntity.get(DEFAULT_REPRESENTATION_TYPE)) &&
-      hasValue(mapForEntity.get(DEFAULT_REPRESENTATION_TYPE).get(DEFAULT_CONTEXT)) &&
-      hasValue(mapForEntity.get(DEFAULT_REPRESENTATION_TYPE).get(DEFAULT_CONTEXT).get(DEFAULT_THEME))) {
-      return mapForEntity.get(DEFAULT_REPRESENTATION_TYPE).get(DEFAULT_CONTEXT).get(DEFAULT_THEME);
-    }
-  }
-  return METADATA_REPRESENTATION_COMPONENT_DECORATOR_MAP.get(DEFAULT_ENTITY_TYPE).get(DEFAULT_REPRESENTATION_TYPE).get(DEFAULT_CONTEXT).get(DEFAULT_THEME);
+  return getMatch(METADATA_REPRESENTATION_COMPONENT_DECORATOR_MAP, [entityType, mdRepresentationType, context, theme], [DEFAULT_ENTITY_TYPE, DEFAULT_REPRESENTATION_TYPE, DEFAULT_CONTEXT, DEFAULT_THEME]).match;
 }

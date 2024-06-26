@@ -4,10 +4,7 @@ import {
   TestBed,
   waitForAsync,
 } from '@angular/core/testing';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -20,7 +17,6 @@ import { AuthMethodType } from '../../../../core/auth/models/auth.method-type';
 import { HardRedirectService } from '../../../../core/services/hard-redirect.service';
 import { NativeWindowService } from '../../../../core/services/window.service';
 import { NativeWindowMockFactory } from '../../../mocks/mock-native-window-ref';
-import { ActivatedRouteStub } from '../../../testing/active-router.stub';
 import { AuthServiceStub } from '../../../testing/auth-service.stub';
 import { RouterStub } from '../../../testing/router.stub';
 import { LogInExternalProviderComponent } from './log-in-external-provider.component';
@@ -72,7 +68,6 @@ describe('LogInExternalProviderComponent', () => {
         { provide: 'isStandalonePage', useValue: true },
         { provide: NativeWindowService, useFactory: NativeWindowMockFactory },
         { provide: Router, useValue: new RouterStub() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
         { provide: HardRedirectService, useValue: hardRedirectService },
         provideMockStore({ initialState }),
       ],

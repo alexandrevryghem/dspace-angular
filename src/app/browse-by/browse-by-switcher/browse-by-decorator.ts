@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 
 import { Context } from '../../core/shared/context.model';
 import { GenericConstructor } from '../../core/shared/generic-constructor';
-import { hasNoValue } from '../../shared/empty.util';
 import {
   DEFAULT_THEME,
   resolveTheme,
-} from '../../shared/object-collection/shared/listable-object/listable-object.decorator';
+} from '../../shared/abstract-component-loader/dynamic-component-loader.utils';
+import { hasNoValue } from '../../shared/empty.util';
 import { BrowseByDateComponent } from '../browse-by-date/browse-by-date.component';
 import { BrowseByMetadataComponent } from '../browse-by-metadata/browse-by-metadata.component';
 import { BrowseByTaxonomyComponent } from '../browse-by-taxonomy/browse-by-taxonomy.component';

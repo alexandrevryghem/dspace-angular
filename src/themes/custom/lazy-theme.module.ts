@@ -74,6 +74,8 @@ import { DsDynamicLookupRelationExternalSourceTabComponent } from './app/shared/
 import { ExternalSourceEntryImportModalComponent } from './app/shared/form/builder/ds-dynamic-form-ui/relation-lookup-modal/external-source-tab/external-source-entry-import-modal/external-source-entry-import-modal.component';
 import { DsDynamicLookupRelationSearchTabComponent } from './app/shared/form/builder/ds-dynamic-form-ui/relation-lookup-modal/search-tab/dynamic-lookup-relation-search-tab.component';
 import { LoadingComponent } from './app/shared/loading/loading.component';
+import { LogInExternalProviderComponent } from './app/shared/log-in/methods/log-in-external-provider/log-in-external-provider.component';
+import { LogInPasswordComponent } from './app/shared/log-in/methods/password/log-in-password.component';
 import { AccessStatusBadgeComponent } from './app/shared/object-collection/shared/badges/access-status-badge/access-status-badge.component';
 import { BadgesComponent } from './app/shared/object-collection/shared/badges/badges.component';
 import { MyDSpaceStatusBadgeComponent } from './app/shared/object-collection/shared/badges/my-dspace-status-badge/my-dspace-status-badge.component';
@@ -194,6 +196,8 @@ const DECLARATIONS = [
   ProfilePageMetadataFormComponent,
   SubmissionUploadFilesComponent,
   ComcolPageContentComponent,
+  LogInExternalProviderComponent,
+  LogInPasswordComponent,
 ];
 
 @NgModule({

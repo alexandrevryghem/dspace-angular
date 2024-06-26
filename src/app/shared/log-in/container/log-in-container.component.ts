@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import { AuthMethod } from '../../../core/auth/models/auth.method';
+import { ThemeService } from '../../theme-support/theme.service';
 import {
   AuthMethodTypeComponent,
   rendersAuthMethodType,
@@ -40,6 +41,7 @@ export class LogInContainerComponent implements OnInit {
 
   constructor(
     protected injector: Injector,
+    protected themeService: ThemeService,
   ) {
   }
 
@@ -60,7 +62,7 @@ export class LogInContainerComponent implements OnInit {
    * Find the correct component based on the AuthMethod's type
    */
   getAuthMethodContent(): AuthMethodTypeComponent {
-    return rendersAuthMethodType(this.authMethod.authMethodType);
+    return rendersAuthMethodType(this.authMethod.authMethodType, this.themeService.getThemeName());
   }
 
 }

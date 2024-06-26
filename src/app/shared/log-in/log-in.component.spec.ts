@@ -81,10 +81,10 @@ describe('LogInComponent', () => {
       providers: [
         { provide: AuthService, useClass: AuthServiceStub },
         { provide: NativeWindowService, useFactory: NativeWindowMockFactory },
-        // { provide: Router, useValue: new RouterStub() },
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
         { provide: HardRedirectService, useValue: hardRedirectService },
         { provide: AuthorizationDataService, useValue: authorizationService },
+        { provide: ThemeService, useValue: getMockThemeService() },
         provideMockStore({ initialState }),
         { provide: ThemeService, useValue: getMockThemeService() },
         LogInComponent,
