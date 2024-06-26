@@ -77,10 +77,10 @@ export class LogInPasswordComponent implements OnInit {
   constructor(
     @Inject('authMethodProvider') public injectedAuthMethodModel: AuthMethod,
     @Inject('isStandalonePage') public isStandalonePage: boolean,
-    private authService: AuthService,
-    private hardRedirectService: HardRedirectService,
-    private formBuilder: UntypedFormBuilder,
-    private store: Store<CoreState>
+    protected authService: AuthService,
+    protected hardRedirectService: HardRedirectService,
+    protected formBuilder: UntypedFormBuilder,
+    protected store: Store<CoreState>
   ) {
     this.authMethod = injectedAuthMethodModel;
   }
