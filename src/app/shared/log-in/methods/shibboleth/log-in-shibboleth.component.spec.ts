@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { provideMockStore } from '@ngrx/store/testing';
@@ -17,7 +17,6 @@ import { AuthMethodType } from '../../../../core/auth/models/auth.method-type';
 import { LogInShibbolethComponent } from './log-in-shibboleth.component';
 import { NativeWindowService } from '../../../../core/services/window.service';
 import { RouterStub } from '../../../testing/router.stub';
-import { ActivatedRouteStub } from '../../../testing/active-router.stub';
 import { NativeWindowMockFactory } from '../../../mocks/mock-native-window-ref';
 import { HardRedirectService } from '../../../../core/services/hard-redirect.service';
 
@@ -74,7 +73,6 @@ describe('LogInShibbolethComponent', () => {
         { provide: 'isStandalonePage', useValue: true },
         { provide: NativeWindowService, useFactory: NativeWindowMockFactory },
         { provide: Router, useValue: new RouterStub() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
         { provide: HardRedirectService, useValue: hardRedirectService },
         provideMockStore({ initialState }),
       ],

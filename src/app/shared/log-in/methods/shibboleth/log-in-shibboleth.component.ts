@@ -64,10 +64,9 @@ export class LogInShibbolethComponent implements OnInit {
     @Inject('authMethodProvider') public injectedAuthMethodModel: AuthMethod,
     @Inject('isStandalonePage') public isStandalonePage: boolean,
     @Inject(NativeWindowService) protected _window: NativeWindowRef,
-    private route: RouteService,
-    private authService: AuthService,
-    private hardRedirectService: HardRedirectService,
-    private store: Store<CoreState>
+    protected authService: AuthService,
+    protected hardRedirectService: HardRedirectService,
+    protected store: Store<CoreState>
   ) {
     this.authMethod = injectedAuthMethodModel;
   }

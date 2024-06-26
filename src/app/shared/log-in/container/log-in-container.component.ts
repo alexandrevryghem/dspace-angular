@@ -2,6 +2,7 @@ import { Component, Injector, Input, OnInit } from '@angular/core';
 
 import { rendersAuthMethodType } from '../methods/log-in.methods-decorator';
 import { AuthMethod } from '../../../core/auth/models/auth.method';
+import { ThemeService } from '../../theme-support/theme.service';
 
 /**
  * This component represents a component container for log-in methods available.
@@ -27,12 +28,10 @@ export class LogInContainerComponent implements OnInit {
    */
   public objectInjector: Injector;
 
-  /**
-   * Initialize instance variables
-   *
-   * @param {Injector} injector
-   */
-  constructor(private injector: Injector) {
+  constructor(
+    private injector: Injector,
+    private themeService: ThemeService,
+  ) {
   }
 
   /**
@@ -52,7 +51,7 @@ export class LogInContainerComponent implements OnInit {
    * Find the correct component based on the AuthMethod's type
    */
   getAuthMethodContent(): string {
-      return rendersAuthMethodType(this.authMethod.authMethodType);
+    return rendersAuthMethodType(this.authMethod.authMethodType, this.themeService.getThemeName());
   }
 
 }

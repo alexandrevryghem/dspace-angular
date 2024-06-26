@@ -21,6 +21,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HardRedirectService } from '../../core/services/hard-redirect.service';
 import { AuthorizationDataService } from '../../core/data/feature-authorization/authorization-data.service';
 import { of } from 'rxjs';
+import { ThemeService } from '../theme-support/theme.service';
+import { getMockThemeService } from '../mocks/theme-service.mock';
 
 describe('LogInComponent', () => {
 
@@ -70,10 +72,10 @@ describe('LogInComponent', () => {
       providers: [
         { provide: AuthService, useClass: AuthServiceStub },
         { provide: NativeWindowService, useFactory: NativeWindowMockFactory },
-        // { provide: Router, useValue: new RouterStub() },
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
         { provide: HardRedirectService, useValue: hardRedirectService },
         { provide: AuthorizationDataService, useValue: authorizationService },
+        { provide: ThemeService, useValue: getMockThemeService() },
         provideMockStore({ initialState }),
         LogInComponent
       ],

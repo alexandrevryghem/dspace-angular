@@ -13,6 +13,8 @@ import { AuthMethod } from '../../../core/auth/models/auth.method';
 import { AuthServiceStub } from '../../testing/auth-service.stub';
 import { createTestComponent } from '../../testing/utils.test';
 import { HardRedirectService } from '../../../core/services/hard-redirect.service';
+import { ThemeService } from '../../theme-support/theme.service';
+import { getMockThemeService } from '../../mocks/theme-service.mock';
 
 describe('LogInContainerComponent', () => {
 
@@ -43,6 +45,7 @@ describe('LogInContainerComponent', () => {
       providers: [
         { provide: AuthService, useClass: AuthServiceStub },
         { provide: HardRedirectService, useValue: hardRedirectService },
+        { provide: ThemeService, useValue: getMockThemeService() },
         LogInContainerComponent
       ],
       schemas: [
