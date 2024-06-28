@@ -97,5 +97,10 @@ export function metadataRepresentationComponent(entityType: string, mdRepresenta
  * @param theme the theme to match
  */
 export function getMetadataRepresentationComponent(entityType: string, mdRepresentationType: MetadataRepresentationType, context: Context = DEFAULT_CONTEXT, theme = DEFAULT_THEME) {
-  return getMatch(METADATA_REPRESENTATION_COMPONENT_DECORATOR_MAP, [entityType, mdRepresentationType, context, theme], [DEFAULT_ENTITY_TYPE, DEFAULT_REPRESENTATION_TYPE, DEFAULT_CONTEXT, DEFAULT_THEME]).match;
+  const idealMatch = getMatch(METADATA_REPRESENTATION_COMPONENT_DECORATOR_MAP, [entityType, mdRepresentationType, context, theme], [DEFAULT_ENTITY_TYPE, DEFAULT_REPRESENTATION_TYPE, DEFAULT_CONTEXT, DEFAULT_THEME])?.match;
+  if (hasValue(idealMatch)) {
+    return idealMatch;
+  } else {
+    return getMatch(METADATA_REPRESENTATION_COMPONENT_DECORATOR_MAP, [DEFAULT_ENTITY_TYPE, mdRepresentationType, context, theme], [DEFAULT_ENTITY_TYPE, DEFAULT_REPRESENTATION_TYPE, DEFAULT_CONTEXT, DEFAULT_THEME]).match;
+  }
 }
