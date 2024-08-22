@@ -17,6 +17,7 @@ import { MetadatumRepresentation } from '../../../core/shared/metadata-represent
 import { ItemMetadataRepresentation } from '../../../core/shared/metadata-representation/item/item-metadata-representation.model';
 import { followLink } from '../../../shared/utils/follow-link-config.model';
 import { AbstractIncrementalListComponent } from '../abstract-incremental-list/abstract-incremental-list.component';
+import { Context } from '../../../core/shared/context.model';
 
 @Component({
   selector: 'ds-metadata-representation-list',
@@ -29,6 +30,12 @@ import { AbstractIncrementalListComponent } from '../abstract-incremental-list/a
  * It expects a label to put on top of the list
  */
 export class MetadataRepresentationListComponent extends AbstractIncrementalListComponent<Observable<MetadataRepresentation[]>> {
+
+  /**
+   * The context this component is used in
+   */
+  @Input() context: Context;
+
   /**
    * The parent of the list of related items to display
    */
