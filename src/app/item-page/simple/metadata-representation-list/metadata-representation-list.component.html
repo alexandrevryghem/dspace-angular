@@ -2,7 +2,8 @@
   <ng-container *ngFor="let objectPage of objects; let i = index">
     <ng-container *ngVar="(objectPage | async) as representations">
       <ds-metadata-representation-loader *ngFor="let rep of representations"
-                                         [mdRepresentation]="rep">
+                                         [mdRepresentation]="rep"
+                                         [context]="context">
       </ds-metadata-representation-loader>
       <ds-themed-loading *ngIf="(i + 1) === objects.length && (i > 0) && (!representations || representations?.length === 0)" message="{{'loading.default' | translate}}"></ds-themed-loading>
       <div class="d-inline-block w-100 mt-2" *ngIf="(i + 1) === objects.length && representations?.length > 0">

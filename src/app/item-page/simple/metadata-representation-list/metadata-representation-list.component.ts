@@ -15,6 +15,7 @@ import {
 } from '../../../core/shared/metadata-representation/metadatum/metadatum-representation.model';
 import { BrowseService } from '../../../core/browse/browse.service';
 import { BrowseDefinitionDataService } from '../../../core/browse/browse-definition-data.service';
+import { Context } from '../../../core/shared/context.model';
 
 @Component({
   selector: 'ds-metadata-representation-list',
@@ -27,6 +28,12 @@ import { BrowseDefinitionDataService } from '../../../core/browse/browse-definit
  * It expects a label to put on top of the list
  */
 export class MetadataRepresentationListComponent extends AbstractIncrementalListComponent<Observable<MetadataRepresentation[]>> {
+
+  /**
+   * The context this component is used in
+   */
+  @Input() context: Context;
+
   /**
    * The parent of the list of related items to display
    */
