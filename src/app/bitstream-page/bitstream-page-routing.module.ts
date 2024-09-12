@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthenticatedGuard } from '../core/auth/authenticated.guard';
 import { BitstreamPageResolver } from './bitstream-page.resolver';
-import { BitstreamDownloadPageComponent } from './bitstream-download-page/bitstream-download-page.component';
 import { ResourcePolicyTargetResolver } from '../shared/resource-policies/resolvers/resource-policy-target.resolver';
 import { ResourcePolicyCreateComponent } from '../shared/resource-policies/create/resource-policy-create.component';
 import { ResourcePolicyResolver } from '../shared/resource-policies/resolvers/resource-policy.resolver';
@@ -13,6 +12,7 @@ import { BitstreamBreadcrumbResolver } from '../core/breadcrumbs/bitstream-bread
 import { BitstreamBreadcrumbsService } from '../core/breadcrumbs/bitstream-breadcrumbs.service';
 import { I18nBreadcrumbResolver } from '../core/breadcrumbs/i18n-breadcrumb.resolver';
 import { ThemedEditBitstreamPageComponent } from './edit-bitstream-page/themed-edit-bitstream-page.component';
+import { ThemedBitstreamDownloadPageComponent } from './bitstream-download-page/themed-bitstream-download-page.component';
 
 const EDIT_BITSTREAM_PATH = ':id/edit';
 const EDIT_BITSTREAM_AUTHORIZATIONS_PATH = ':id/authorizations';
@@ -26,7 +26,7 @@ const EDIT_BITSTREAM_AUTHORIZATIONS_PATH = ':id/authorizations';
       {
         // Resolve XMLUI bitstream download URLs
         path: 'handle/:prefix/:suffix/:filename',
-        component: BitstreamDownloadPageComponent,
+        component: ThemedBitstreamDownloadPageComponent,
         resolve: {
           bitstream: LegacyBitstreamUrlResolver
         },
@@ -34,7 +34,7 @@ const EDIT_BITSTREAM_AUTHORIZATIONS_PATH = ':id/authorizations';
       {
         // Resolve JSPUI bitstream download URLs
         path: ':prefix/:suffix/:sequence_id/:filename',
-        component: BitstreamDownloadPageComponent,
+        component: ThemedBitstreamDownloadPageComponent,
         resolve: {
           bitstream: LegacyBitstreamUrlResolver
         },
@@ -42,7 +42,7 @@ const EDIT_BITSTREAM_AUTHORIZATIONS_PATH = ':id/authorizations';
       {
         // Resolve angular bitstream download URLs
         path: ':id/download',
-        component: BitstreamDownloadPageComponent,
+        component: ThemedBitstreamDownloadPageComponent,
         resolve: {
           bitstream: BitstreamPageResolver
         },
