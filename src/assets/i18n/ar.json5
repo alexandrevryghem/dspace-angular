@@ -1310,6 +1310,34 @@
   "item.orcid.return": "رجوع",
   "item.listelement.badge": "المادة",
   "item.page.description": "الوصف",
+
+  // "item.page.org-units": "Organizational Units",
+  "item.page.org-units": "وحدات مؤسسية",
+
+  // "item.page.projects": "Research Projects",
+  "item.page.projects": "مشاريع البحث",
+
+  // "item.page.publications": "Publications",
+  "item.page.publications": "منشورات",
+
+  // "item.page.articles": "Articles",
+  "item.page.articles": "مقالات",
+
+  // "item.page.journal": "Journal",
+  "item.page.journal": "الدوري",
+
+  // "item.page.journal-issue": "Journal Issue",
+  "item.page.journal-issue": "عدد الدوري",
+
+  // "item.page.journal-issues": "Journal Issues",
+  "item.page.journal-issues": "سجل الدوري",
+
+  // "item.page.journal-volume": "Journal Volume",
+  "item.page.journal-volume": "سلسلة الدورية",
+
+  // "item.page.journal-volumes": "Journal Volumes",
+  "item.page.journal-volumes": "سلسلة الدوريات",
+
   "item.page.journal-issn": "ردمد الدورية",
   "item.page.journal-title": "عنوان الدوري",
   "item.page.publisher": "الناشر",
@@ -1341,7 +1369,7 @@
   "confidence.indicator.help-text.unset": "لم يتم تسجيل الثقة بهذه القيمة أبدًا",
   "confidence.indicator.help-text.unknown": "قيمة ثقة غير معروفة",
   "item.page.abstract": "أ",
-  "item.page.author": "المؤلفين",
+  "item.page.authors": "المؤلفين",
   "item.page.citation": "المرسل",
   "item.page.collections": "مقبول",
   "item.page.collections.loading": "جاري التحميل...",
