@@ -10,7 +10,6 @@ import { map, take } from 'rxjs/operators';
 import { DSpaceObject } from '../../core/shared/dspace-object.model';
 import {
   ITEM_ACCESS_CONTROL_SELECT_BITSTREAMS_LIST_ID,
-  ItemAccessControlSelectBitstreamsModalComponent
 } from './item-access-control-select-bitstreams-modal/item-access-control-select-bitstreams-modal.component';
 import { BulkAccessConfigDataService } from '../../core/config/bulk-access-config-data.service';
 import { getFirstCompletedRemoteData } from '../../core/shared/operators';
@@ -19,6 +18,7 @@ import { AlertType } from '../alert/aletr-type';
 import {
   createAccessControlInitialFormState
 } from './access-control-form-container-intial-state';
+import { ThemedItemAccessControlSelectBitstreamsModalComponent } from './item-access-control-select-bitstreams-modal/themed-item-access-control-select-bitstreams-modal.component';
 
 @Component({
   selector: 'ds-access-control-form-container',
@@ -139,7 +139,7 @@ export class AccessControlFormContainerComponent<T extends DSpaceObject> impleme
    * @param item The item for which to change the access control
    */
   openSelectBitstreamsModal(item: Item) {
-    const ref = this.modalService.open(ItemAccessControlSelectBitstreamsModalComponent);
+    const ref = this.modalService.open(ThemedItemAccessControlSelectBitstreamsModalComponent);
     ref.componentInstance.selectedBitstreams = this.state.bitstream.selectedBitstreams;
     ref.componentInstance.item = item;
 
