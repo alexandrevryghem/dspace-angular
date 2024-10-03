@@ -12,8 +12,8 @@
            (resultFound)="onResultFound($event)"
            (deselectObject)="deselectObject.emit($event)"
            (selectObject)="selectObject.emit($event)">
-  <div additionalSearchOptions *ngIf="repeatable" class="position-absolute">
-    <div class="input-group mb-3">
+  <div additionalSearchOptions *ngIf="repeatable">
+    <div class="input-group">
       <div class="input-group-prepend">
         <div class="input-group-text">
           <!-- In theory we don't need separate checkboxes for this,
