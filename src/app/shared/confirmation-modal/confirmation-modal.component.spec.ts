@@ -1,4 +1,4 @@
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,15 +13,13 @@ describe('ConfirmationModalComponent', () => {
   const modalStub = jasmine.createSpyObj('modalStub', ['close']);
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
       declarations: [ConfirmationModalComponent],
       providers: [
         { provide: NgbActiveModal, useValue: modalStub }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
-
   }));
 
   beforeEach(() => {
@@ -31,8 +29,12 @@ describe('ConfirmationModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should emit false on destroy when no button has been clicked', () => {
+    spyOn(component.response, 'emit');
+
+    component.ngOnDestroy();
+
+    expect(component.response.emit).toHaveBeenCalledOnceWith(false);
   });
 
   describe('close', () => {
@@ -55,6 +57,11 @@ describe('ConfirmationModalComponent', () => {
     it('behaviour subject should emit true', () => {
       expect(component.response.emit).toHaveBeenCalledWith(true);
     });
+    it('should not emit again on destroy', () => {
+      component.ngOnDestroy();
+
+      expect(component.response.emit).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('cancelPressed', () => {
@@ -67,6 +74,11 @@ describe('ConfirmationModalComponent', () => {
     });
     it('behaviour subject should emit false', () => {
       expect(component.response.emit).toHaveBeenCalledWith(false);
+    });
+    it('should not emit again on destroy', () => {
+      component.ngOnDestroy();
+
+      expect(component.response.emit).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -1,8 +1,9 @@
-import { of as observableOf } from 'rxjs';
+// eslint-disable-next-line max-classes-per-file
+import { of as observableOf, Observable } from 'rxjs';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { DebugElement, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { METADATA_EXPORT_SCRIPT_NAME, ScriptDataService } from '../../../../core/data/processes/script-data.service';
@@ -10,7 +11,6 @@ import { Collection } from '../../../../core/shared/collection.model';
 import { Community } from '../../../../core/shared/community.model';
 import { Item } from '../../../../core/shared/item.model';
 import { ProcessParameter } from '../../../../process-page/processes/process-parameter.model';
-import { ConfirmationModalComponent } from '../../../confirmation-modal/confirmation-modal.component';
 import { TranslateLoaderMock } from '../../../mocks/translate-loader.mock';
 import { NotificationsService } from '../../../notifications/notifications.service';
 import { NotificationsServiceStub } from '../../../testing/notifications-service.stub';
@@ -21,6 +21,14 @@ import {
 } from '../../../remote-data.utils';
 import { ExportMetadataSelectorComponent } from './export-metadata-selector.component';
 import { AuthorizationDataService } from '../../../../core/data/feature-authorization/authorization-data.service';
+
+@Component({
+  selector: 'ds-confirmation-modal',
+  template: '',
+})
+class ConfirmationModalComponent {
+  response: Observable<boolean>;
+}
 
 // No way to add entryComponents yet to testbed; alternative implemented; source: https://stackoverflow.com/questions/41689468/how-to-shallow-test-a-component-with-an-entrycomponents
 @NgModule({
@@ -42,7 +50,6 @@ class ModelTestModule {
 describe('ExportMetadataSelectorComponent', () => {
   let component: ExportMetadataSelectorComponent;
   let fixture: ComponentFixture<ExportMetadataSelectorComponent>;
-  let debugElement: DebugElement;
   let modalRef;
 
   let router;
@@ -132,15 +139,10 @@ describe('ExportMetadataSelectorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ExportMetadataSelectorComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
     const modalService = TestBed.inject(NgbModal);
     modalRef = modalService.open(ConfirmationModalComponent);
     modalRef.componentInstance.response = observableOf(true);
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 
   describe('if item is selected', () => {
