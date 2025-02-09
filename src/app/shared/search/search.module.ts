@@ -17,8 +17,6 @@ import { SearchFacetRangeOptionComponent } from './search-filters/search-filter/
 import { SearchAuthorityFilterComponent } from './search-filters/search-filter/search-authority-filter/search-authority-filter.component';
 import { SearchSidebarComponent } from './search-sidebar/search-sidebar.component';
 import { SearchSettingsComponent } from './search-settings/search-settings.component';
-import { ConfigurationSearchPageComponent } from '../../search-page/configuration-search-page.component';
-import { ThemedConfigurationSearchPageComponent } from '../../search-page/themed-configuration-search-page.component';
 import { SearchObjects } from './models/search-objects.model';
 import { FacetConfigResponse } from './models/facet-config-response.model';
 import { FacetValues } from './models/facet-values.model';
@@ -56,8 +54,6 @@ const COMPONENTS = [
   SearchFacetRangeOptionComponent,
   SearchAuthorityFilterComponent,
   SearchSwitchConfigurationComponent,
-  ConfigurationSearchPageComponent,
-  ThemedConfigurationSearchPageComponent,
   ThemedSearchResultsComponent,
   ThemedSearchSettingsComponent,
   ThemedSearchFiltersComponent,
