@@ -5,6 +5,7 @@ import { RootModule } from '../../app/root.module';
 import { JournalComponent } from './app/entity-groups/journal-entities/item-pages/journal/journal.component';
 import { JournalIssueComponent } from './app/entity-groups/journal-entities/item-pages/journal-issue/journal-issue.component';
 import { JournalVolumeComponent } from './app/entity-groups/journal-entities/item-pages/journal-volume/journal-volume.component';
+import { OrgUnitComponent } from './app/entity-groups/research-entities/item-pages/org-unit/org-unit.component';
 import { PersonComponent } from './app/entity-groups/research-entities/item-pages/person/person.component';
 import { FooterComponent } from './app/footer/footer.component';
 import { HeaderComponent } from './app/header/header.component';
@@ -42,6 +43,7 @@ const ENTRY_COMPONENTS = [
   JournalIssueComponent,
   JournalVolumeComponent,
   PersonComponent,
+  OrgUnitComponent,
   PublicationComponent,
   UntypedItemComponent,
   CommunityListElementComponent,
