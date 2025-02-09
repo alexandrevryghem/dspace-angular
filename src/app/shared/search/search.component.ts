@@ -90,6 +90,12 @@ import { SearchConfigurationOption } from './search-switch-configuration/search-
   templateUrl: './search.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [pushInOut],
+  providers: [
+    {
+      provide: SEARCH_CONFIG_SERVICE,
+      useClass: SearchConfigurationService,
+    },
+  ],
   standalone: true,
   imports: [
     AsyncPipe,

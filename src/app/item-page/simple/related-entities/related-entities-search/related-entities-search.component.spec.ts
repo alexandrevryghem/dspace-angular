@@ -1,4 +1,3 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   ComponentFixture,
   TestBed,
@@ -9,7 +8,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { Item } from '../../../../core/shared/item.model';
-import { ThemedConfigurationSearchPageComponent } from '../../../../search-page/themed-configuration-search-page.component';
+import { ThemedSearchComponent } from '../../../../shared/search/themed-search.component';
 import { RelatedEntitiesSearchComponent } from './related-entities-search.component';
 
 describe('RelatedEntitiesSearchComponent', () => {
@@ -25,12 +24,18 @@ describe('RelatedEntitiesSearchComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), NoopAnimationsModule, FormsModule, RelatedEntitiesSearchComponent],
-      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        FormsModule,
+        NoopAnimationsModule,
+        RelatedEntitiesSearchComponent,
+        TranslateModule.forRoot(),
+      ],
     })
       .overrideComponent(RelatedEntitiesSearchComponent, {
         remove: {
-          imports: [ThemedConfigurationSearchPageComponent],
+          imports: [
+            ThemedSearchComponent,
+          ],
         },
       })
       .compileComponents();

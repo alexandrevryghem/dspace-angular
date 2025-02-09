@@ -5,15 +5,15 @@ import {
 } from '@angular/core';
 
 import { Item } from '../../../../core/shared/item.model';
-import { ThemedConfigurationSearchPageComponent } from '../../../../search-page/themed-configuration-search-page.component';
 import { isNotEmpty } from '../../../../shared/empty.util';
+import { ThemedSearchComponent } from '../../../../shared/search/themed-search.component';
 import { getFilterByRelation } from '../../../../shared/utils/relation-query.utils';
 
 @Component({
   selector: 'ds-related-entities-search',
   templateUrl: './related-entities-search.component.html',
   standalone: true,
-  imports: [ThemedConfigurationSearchPageComponent],
+  imports: [ThemedSearchComponent],
 })
 /**
  * A component to show related items as search results.

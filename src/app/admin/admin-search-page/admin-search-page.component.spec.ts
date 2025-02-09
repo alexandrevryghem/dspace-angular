@@ -1,4 +1,3 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   ComponentFixture,
   TestBed,
@@ -6,7 +5,7 @@ import {
 } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { ThemedConfigurationSearchPageComponent } from '../../search-page/themed-configuration-search-page.component';
+import { ThemedSearchComponent } from '../../shared/search/themed-search.component';
 import { ActivatedRouteStub } from '../../shared/testing/active-router.stub';
 import { AdminSearchPageComponent } from './admin-search-page.component';
 
@@ -20,10 +19,11 @@ describe('AdminSearchPageComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
     }).overrideComponent(AdminSearchPageComponent, {
       remove: {
-        imports: [ThemedConfigurationSearchPageComponent],
+        imports: [
+          ThemedSearchComponent,
+        ],
       },
     })
       .compileComponents();
