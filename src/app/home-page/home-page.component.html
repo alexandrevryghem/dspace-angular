@@ -1,13 +1,13 @@
 <ds-home-coar></ds-home-coar>
 <ds-home-news></ds-home-news>
-<ds-configuration-search-page *ngIf="showDiscoverFilters"
-                              [sideBarWidth]="3"
-                              [showViewModes]="false"
-                              [searchEnabled]="false"
-                              [inPlaceSearch]="false"
-                              [showScopeSelector]="false">
+<ds-search *ngIf="showDiscoverFilters"
+           [sideBarWidth]="3"
+           [showViewModes]="false"
+           [searchEnabled]="false"
+           [inPlaceSearch]="false"
+           [showScopeSelector]="false">
   <ng-container searchContentTop *ngTemplateOutlet="homeContent"></ng-container>
-</ds-configuration-search-page>
+</ds-search>
 <div *ngIf="!showDiscoverFilters" class="container">
   <ng-container *ngTemplateOutlet="homeContent"></ng-container>
 </div>

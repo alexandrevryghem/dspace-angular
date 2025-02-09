@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { SearchConfigurationService } from '../../../../../app/core/shared/search/search-configuration.service';
+import { SEARCH_CONFIG_SERVICE } from '../../../../../app/my-dspace-page/my-dspace-configuration.service';
 import { pushInOut } from '../../../../../app/shared/animations/push';
 import { SearchComponent as BaseComponent } from '../../../../../app/shared/search/search.component';
 import { SearchLabelsComponent } from '../../../../../app/shared/search/search-labels/search-labels.component';
@@ -26,6 +28,12 @@ import { ViewModeSwitchComponent } from '../../../../../app/shared/view-mode-swi
   templateUrl: '../../../../../app/shared/search/search.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [pushInOut],
+  providers: [
+    {
+      provide: SEARCH_CONFIG_SERVICE,
+      useClass: SearchConfigurationService,
+    },
+  ],
   standalone: true,
   imports: [
     AsyncPipe,

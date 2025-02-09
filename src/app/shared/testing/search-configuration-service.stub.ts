@@ -46,6 +46,9 @@ export class SearchConfigurationServiceStub {
     return observableOf([]);
   }
 
+  setPaginationId(_paginationId: string): void {
+  }
+
   getConfig () {
     return observableOf({ hasSucceeded: true, payload: [] });
   }

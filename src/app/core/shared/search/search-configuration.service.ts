@@ -296,7 +296,7 @@ export class SearchConfigurationService implements OnDestroy {
     );
   }
 
-  setPaginationId(paginationId): void {
+  setPaginationId(paginationId: string): void {
     if (isNotEmpty(paginationId)) {
       const currentValue: PaginatedSearchOptions = this.paginatedSearchOptions.getValue();
       const updatedValue: PaginatedSearchOptions = Object.assign(new PaginatedSearchOptions({}), currentValue, {

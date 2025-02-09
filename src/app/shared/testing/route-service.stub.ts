@@ -18,7 +18,7 @@ export const routeServiceStub: any = {
     return EMPTY;
   },
   getQueryParameterValues: (param: string) => {
-    return observableOf({});
+    return observableOf([]);
   },
   getQueryParamsWithPrefix: (param: string) => {
     return observableOf({});
@@ -27,7 +27,7 @@ export const routeServiceStub: any = {
     return observableOf(new Map());
   },
   getQueryParameterValue: () => {
-    return observableOf({});
+    return observableOf('');
   },
   getRouteParameterValue: (param) => {
     return observableOf('');
