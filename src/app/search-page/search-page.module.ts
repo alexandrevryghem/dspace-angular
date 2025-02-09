@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
 import { SidebarService } from '../shared/sidebar/sidebar.service';
-import { ConfigurationSearchPageGuard } from './configuration-search-page.guard';
 import { StatisticsModule } from '../statistics/statistics.module';
 import { SearchPageComponent } from './search-page.component';
 import { SearchFilterService } from '../core/shared/search/search-filter.service';
@@ -32,7 +31,6 @@ const components = [
   providers: [
     SidebarService,
     SearchFilterService,
-    ConfigurationSearchPageGuard,
     SearchConfigurationService
   ],
   exports: components

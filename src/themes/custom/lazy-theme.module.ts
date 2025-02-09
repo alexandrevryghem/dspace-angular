@@ -49,7 +49,6 @@ import { RootComponent } from './app/root/root.component';
 import { BrowseBySwitcherComponent } from './app/browse-by/browse-by-switcher/browse-by-switcher.component';
 import { CommunityListPageComponent } from './app/community-list-page/community-list-page.component';
 import { SearchPageComponent } from './app/search-page/search-page.component';
-import { ConfigurationSearchPageComponent } from './app/search-page/configuration-search-page.component';
 import { SearchFormComponent } from './app/shared/search-form/search-form.component';
 import { EndUserAgreementComponent } from './app/info/end-user-agreement/end-user-agreement.component';
 import { PageNotFoundComponent } from './app/pagenotfound/pagenotfound.component';
@@ -164,7 +163,6 @@ const DECLARATIONS = [
   BrowseBySwitcherComponent,
   CommunityListPageComponent,
   SearchPageComponent,
-  ConfigurationSearchPageComponent,
   SearchFormComponent,
   EndUserAgreementComponent,
   PageNotFoundComponent,
