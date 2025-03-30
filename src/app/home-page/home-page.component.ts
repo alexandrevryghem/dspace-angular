@@ -1,6 +1,5 @@
 import {
   AsyncPipe,
-  NgIf,
   NgTemplateOutlet,
 } from '@angular/common';
 import {
@@ -20,7 +19,7 @@ import {
 import { SearchConfigurationService } from '../core/shared/search/search-configuration.service';
 import { Site } from '../core/shared/site.model';
 import { SEARCH_CONFIG_SERVICE } from '../my-dspace-page/my-dspace-configuration.service';
-import { SuggestionsPopupComponent } from '../notifications/suggestions-popup/suggestions-popup.component';
+import { SuggestionsPopupComponent } from '../notifications/suggestions/popup/suggestions-popup.component';
 import { ThemedSearchComponent } from '../shared/search/themed-search.component';
 import { ThemedSearchFormComponent } from '../shared/search-form/themed-search-form.component';
 import { ViewTrackerComponent } from '../statistics/angulartics/dspace/view-tracker.component';
@@ -43,7 +42,6 @@ import { ThemedTopLevelCommunityListComponent } from './top-level-community-list
   imports: [
     AsyncPipe,
     HomeCoarComponent,
-    NgIf,
     NgTemplateOutlet,
     RecentItemListComponent,
     SuggestionsPopupComponent,

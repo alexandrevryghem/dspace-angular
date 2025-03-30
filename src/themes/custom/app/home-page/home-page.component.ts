@@ -1,6 +1,5 @@
 import {
   AsyncPipe,
-  NgIf,
   NgTemplateOutlet,
 } from '@angular/common';
 import { Component } from '@angular/core';
@@ -11,7 +10,7 @@ import { ThemedHomeNewsComponent } from '../../../../app/home-page/home-news/the
 import { HomePageComponent as BaseComponent } from '../../../../app/home-page/home-page.component';
 import { RecentItemListComponent } from '../../../../app/home-page/recent-item-list/recent-item-list.component';
 import { ThemedTopLevelCommunityListComponent } from '../../../../app/home-page/top-level-community-list/themed-top-level-community-list.component';
-import { SuggestionsPopupComponent } from '../../../../app/notifications/suggestions-popup/suggestions-popup.component';
+import { SuggestionsPopupComponent } from '../../../../app/notifications/suggestions/popup/suggestions-popup.component';
 import { ThemedSearchComponent } from '../../../../app/shared/search/themed-search.component';
 import { ThemedSearchFormComponent } from '../../../../app/shared/search-form/themed-search-form.component';
 import { ViewTrackerComponent } from '../../../../app/statistics/angulartics/dspace/view-tracker.component';
@@ -26,7 +25,6 @@ import { ViewTrackerComponent } from '../../../../app/statistics/angulartics/dsp
   imports: [
     AsyncPipe,
     HomeCoarComponent,
-    NgIf,
     NgTemplateOutlet,
     RecentItemListComponent,
     SuggestionsPopupComponent,

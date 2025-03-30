@@ -42,7 +42,7 @@ export const environment: BuildConfig = {
     port: 443,
     // NOTE: Space is capitalized because 'namespace' is a reserved string in TypeScript
     nameSpace: '/api',
-    baseUrl: 'https://rest.com/api',
+    baseUrl: 'https://rest.com/server',
   },
 
   actuators: {
@@ -269,14 +269,18 @@ export const environment: BuildConfig = {
       // Rounded to the nearest size in the list of selectable sizes on the
       // settings menu.  See pageSizeOptions in 'pagination-component-options.model.ts'.
       pageSize: 5,
+      // Show the bitstream access status label
+      showAccessStatuses: false,
     },
   },
   community: {
+    defaultBrowseTab: 'search',
     searchSection: {
       showSidebar: true,
     },
   },
   collection: {
+    defaultBrowseTab: 'search',
     searchSection: {
       showSidebar: true,
     },
