@@ -1,4 +1,6 @@
+// eslint-disable-next-line max-classes-per-file
 import {
+  Component,
   DebugElement,
   NgModule,
   NO_ERRORS_SCHEMA,
@@ -22,7 +24,10 @@ import {
   TranslateLoader,
   TranslateModule,
 } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
+import {
+  Observable,
+  of as observableOf,
+} from 'rxjs';
 
 import { AuthorizationDataService } from '../../../../core/data/feature-authorization/authorization-data.service';
 import {
@@ -33,8 +38,6 @@ import { Collection } from '../../../../core/shared/collection.model';
 import { Item } from '../../../../core/shared/item.model';
 import { SearchService } from '../../../../core/shared/search/search.service';
 import { ProcessParameter } from '../../../../process-page/processes/process-parameter.model';
-import { SearchServiceStub } from '../../../../shared/testing/search-service.stub';
-import { ConfirmationModalComponent } from '../../../confirmation-modal/confirmation-modal.component';
 import { TranslateLoaderMock } from '../../../mocks/translate-loader.mock';
 import { NotificationsService } from '../../../notifications/notifications.service';
 import {
@@ -43,7 +46,17 @@ import {
   createSuccessfulRemoteDataObject$,
 } from '../../../remote-data.utils';
 import { NotificationsServiceStub } from '../../../testing/notifications-service.stub';
+import { SearchServiceStub } from '../../../testing/search-service.stub';
 import { ExportBatchSelectorComponent } from './export-batch-selector.component';
+
+@Component({
+  selector: 'ds-confirmation-modal',
+  template: '',
+  standalone: true,
+})
+class ConfirmationModalComponent {
+  response: Observable<boolean>;
+}
 
 // No way to add entryComponents yet to testbed; alternative implemented; source: https://stackoverflow.com/questions/41689468/how-to-shallow-test-a-component-with-an-entrycomponents
 @NgModule({

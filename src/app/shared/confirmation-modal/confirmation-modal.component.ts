@@ -1,8 +1,8 @@
-
 import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   Output,
 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [TranslateModule],
 })
-export class ConfirmationModalComponent {
+export class ConfirmationModalComponent implements OnDestroy {
   @Input() headerLabel: string;
   @Input() infoLabel: string;
   @Input() cancelLabel: string;
@@ -33,15 +33,28 @@ export class ConfirmationModalComponent {
   @Output()
   response = new EventEmitter<boolean>();
 
+  /**
+   * Keep track whether one of the buttons was directly pressed. Used to emit the {@link response} when the user clicks
+   * outside the modal.
+   */
+  buttonPressed = false;
+
   constructor(
     protected activeModal: NgbActiveModal,
   ) {
+  }
+
+  ngOnDestroy(): void {
+    if (!this.buttonPressed) {
+      this.response.emit(false);
+    }
   }
 
   /**
    * Confirm the action that led to the modal
    */
   confirmPressed() {
+    this.buttonPressed = true;
     this.response.emit(true);
     this.close();
   }
@@ -50,6 +63,7 @@ export class ConfirmationModalComponent {
    * Cancel the action that led to the modal and close modal
    */
   cancelPressed() {
+    this.buttonPressed = true;
     this.response.emit(false);
     this.close();
   }
