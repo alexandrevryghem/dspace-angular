@@ -159,6 +159,9 @@ import { RequestCopyModule } from 'src/app/request-copy/request-copy.module';
 import {
   ItemRelationshipsComponent
 } from './app/item-page/edit-item-page/item-relationships/item-relationships.component';
+import {
+  EditRelationshipListWrapperComponent
+} from './app/item-page/edit-item-page/item-relationships/edit-relationship-list-wrapper/edit-relationship-list-wrapper.component';
 
 const DECLARATIONS = [
   FileSectionComponent,
@@ -243,6 +246,7 @@ const DECLARATIONS = [
   ItemStatusComponent,
   EditBitstreamPageComponent,
   ItemRelationshipsComponent,
+  EditRelationshipListWrapperComponent,
 ];
 
 @NgModule({
