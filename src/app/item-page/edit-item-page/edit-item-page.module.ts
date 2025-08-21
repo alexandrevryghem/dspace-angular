@@ -19,6 +19,7 @@ import { ItemEditBitstreamComponent } from './item-bitstreams/item-edit-bitstrea
 import { SearchPageModule } from '../../search-page/search-page.module';
 import { ItemCollectionMapperComponent } from './item-collection-mapper/item-collection-mapper.component';
 import { ItemRelationshipsComponent } from './item-relationships/item-relationships.component';
+import { ThemedItemRelationshipsComponent } from './item-relationships/themed-item-relationships.component';
 import { EditRelationshipComponent } from './item-relationships/edit-relationship/edit-relationship.component';
 import { EditRelationshipListComponent } from './item-relationships/edit-relationship-list/edit-relationship-list.component';
 import { AbstractItemUpdateComponent } from './abstract-item-update/abstract-item-update.component';
@@ -78,6 +79,7 @@ import {
     ItemStatusComponent,
     ThemedItemStatusComponent,
     ItemRelationshipsComponent,
+    ThemedItemRelationshipsComponent,
     ItemBitstreamsComponent,
     ItemVersionHistoryComponent,
     ItemEditBitstreamComponent,
