@@ -63,6 +63,11 @@ export class SearchOptions {
       });
     }
     if (isNotEmpty(args)) {
+      const urlSearchParams: URLSearchParams = new URL(url).searchParams;
+      args = args.filter((arg: string) => {
+        const [key, value] = this.separateArgs(arg);
+        return !urlSearchParams.getAll(key).includes(value);
+      });
       url = new URLCombiner(url, `?${args.join('&')}`).toString();
     }
     return url;
@@ -90,5 +95,14 @@ export class SearchOptions {
     } else {
       return encodeURIComponent(filterQueryValue);
     }
+  }
+
+  /**
+   * Separate args in the form of `key=value` into a tuple of `[key, value]`
+   *
+   * @param arg The arg that needs to be separated
+   */
+  separateArgs(arg: string): [string, string] {
+    return [arg.split('=')[0], arg.split('=').slice(1).join('=')];
   }
 }

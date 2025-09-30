@@ -13,7 +13,7 @@ describe('SearchOptions', () => {
   const fixedFilter = 'f.fixed=1234,5678,equals';                    // '=' and ',equals' should not be URI-encoded
   const query = 'search query';
   const scope = '0fde1ecb-82cc-425a-b600-ac3576d76b47';
-  const baseUrl = 'www.rest.com';
+  const baseUrl = 'https://www.rest.com';
   beforeEach(() => {
     options = new SearchOptions({
       filters: filters,
@@ -28,7 +28,7 @@ describe('SearchOptions', () => {
 
     it('should generate a string with all parameters that are present', () => {
       const outcome = options.toRestUrl(baseUrl);
-      expect(outcome).toEqual('www.rest.com?' +
+      expect(outcome).toEqual('https://www.rest.com?' +
         'f.fixed=1234%2C5678,equals&' +
         'query=search%20query&' +
         'scope=0fde1ecb-82cc-425a-b600-ac3576d76b47&' +
@@ -40,5 +40,9 @@ describe('SearchOptions', () => {
       );
     });
 
+    it('should add duplicate arguments if the base url already contains them', () => {
+      const outcome: string = options.toRestUrl(`${baseUrl}?f.test=value`);
+      expect(new URL(outcome).searchParams.getAll('f.test').length).toBe(1);
+    });
   });
 });
