@@ -24,9 +24,9 @@ import {
   StoreModule,
 } from '@ngrx/store';
 import {
-  MissingTranslationHandler,
+  provideMissingTranslationHandler,
+  provideTranslateService,
   TranslateLoader,
-  TranslateModule,
 } from '@ngx-translate/core';
 import {
   Angulartics2GoogleTagManager,
@@ -66,6 +66,7 @@ import { OrejimeService } from '../../app/shared/cookies/orejime.service';
 import { MissingTranslationHelper } from '../../app/shared/translate/missing-translation.helper';
 import { GoogleAnalyticsService } from '../../app/statistics/google-analytics.service';
 import { SubmissionService } from '../../app/submission/submission.service';
+import { environment } from '../../environments/environment';
 import { REQUEST } from '../../express.tokens';
 import { TranslateBrowserLoader } from '../../ngx-translate-loaders/translate-browser.loader';
 import { BrowserInitService } from './browser-init.service';
@@ -90,16 +91,16 @@ export const browserAppConfig: ApplicationConfig = mergeApplicationConfig({
       Angulartics2RouterlessModule.forRoot(),
       StoreModule.forFeature('core', coreReducers, storeModuleConfig as StoreConfig<CoreState, Action>),
       EffectsModule.forFeature(coreEffects),
-      TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
-          deps: [TransferState, HttpClient],
-        },
-        missingTranslationHandler: { provide: MissingTranslationHandler, useClass: MissingTranslationHelper },
-        useDefaultLang: true,
-      }),
     ),
+    provideTranslateService({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [TransferState, HttpClient],
+      },
+      missingTranslationHandler: provideMissingTranslationHandler(MissingTranslationHelper),
+      fallbackLang: environment.fallbackLanguage,
+    }),
     ...BrowserInitService.providers(),
     { provide: APP_ID, useValue: 'dspace-angular' },
     {

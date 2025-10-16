@@ -81,12 +81,12 @@ describe('LocaleService test suite', () => {
       expect(service.getCurrentLanguageCode()).toBe('de');
     });
 
-    it('should return the default language if the cookie language is disabled', () => {
+    it('should return the fallback language if the cookie language is disabled', () => {
       spyOnGet.and.returnValue('disabled');
       expect(service.getCurrentLanguageCode()).toBe('en');
     });
 
-    it('should return the default language if the cookie language does not exist', () => {
+    it('should return the fallback language if the cookie language does not exist', () => {
       spyOnGet.and.returnValue('does-not-exist');
       expect(service.getCurrentLanguageCode()).toBe('en');
     });
@@ -96,7 +96,7 @@ describe('LocaleService test suite', () => {
       expect(service.getCurrentLanguageCode()).toBe('xx');
     });
 
-    it('should return default language from config', () => {
+    it('should return fallback language from config', () => {
       spyOn(translateService, 'getBrowserLang').and.returnValue('fr');
       expect(service.getCurrentLanguageCode()).toBe('en');
     });
