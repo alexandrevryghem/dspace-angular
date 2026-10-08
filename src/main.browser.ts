@@ -13,8 +13,7 @@ import { browserAppConfig } from './modules/app/browser-app.config';
 import { BrowserHashedFileMapping } from './modules/dynamic-hash/hashed-file-mapping.browser';
 
 const hashedFileMapping = new BrowserHashedFileMapping(document);
-/*const bootstrap = () => platformBrowserDynamic()
-  .bootstrapModule(BrowserAppModule, {});*/
+
 const bootstrap = () => bootstrapApplication(AppComponent, browserAppConfig);
 
 /**

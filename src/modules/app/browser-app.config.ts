@@ -13,6 +13,7 @@ import {
   makeStateKey,
   mergeApplicationConfig,
   provideAppInitializer,
+  provideZoneChangeDetection,
   TransferState,
 } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
@@ -88,6 +89,7 @@ export const browserAppConfig: ApplicationConfig = mergeApplicationConfig({
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
     provideClientHydration(),
+    provideZoneChangeDetection(),
     importProvidersFrom(
       // forRoot ensures the providers are only created once
       Angulartics2RouterlessModule.forRoot(),
