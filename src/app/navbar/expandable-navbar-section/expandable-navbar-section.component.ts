@@ -87,7 +87,7 @@ export class ExpandableNavbarSectionComponent extends NavbarSectionComponent imp
    */
   hasSubSections$: Observable<boolean>;
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onResize() {
     this.isMobile$.pipe(
       first(),
